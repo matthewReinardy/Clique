@@ -1,2 +1,2 @@
 # Clique
-Web III Project: Lexi, Lily, Bruno, and Matt
+Web III Project: Lexie, Lily, Bruno, and Matt
