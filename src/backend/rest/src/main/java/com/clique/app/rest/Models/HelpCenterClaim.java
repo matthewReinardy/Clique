@@ -1,3 +1,7 @@
+package com.clique.app.rest.Models;
+
+import java.time.LocalDateTime;
+
 public class HelpCenterClaim {
 
     // Types of issues users can report

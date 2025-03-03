@@ -1,3 +1,5 @@
+package com.clique.app.rest.Models;
+
 public class Admin {
     // variables to be used for each admin
     private int id;
