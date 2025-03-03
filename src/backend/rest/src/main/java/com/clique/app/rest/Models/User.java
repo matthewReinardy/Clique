@@ -1,5 +1,7 @@
 package com.clique.app.rest.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +10,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,13 +21,22 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String firstName;
 
-    @Column
+    @Column(nullable = false)
     private String lastName;
+
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
 
     @Column
     private String phoneNumber;
@@ -38,49 +50,67 @@ public class User {
     @Column
     private String location;
 
-    // Account credentials
-    @Column
-    private String username;
-    @Column
-    private String email;
-    @Column
-    private String password;
-
-    // Profile information
     @Column
     private Boolean isPrivate;
+
     @Column
     private Boolean isVerified;
+
     @Column
     private String profilePicture;
+
     @Column
     private String accountType;
 
-    // Social data (following, follwers, etc)
-    @Column
+    @ElementCollection
     private List<String> interests;
-    @Column
+
+    @Column(nullable = false)
     private Integer followerCount = 0;
-    @Column
+
+    @Column(nullable = false)
     private Integer followingCount = 0;
-    @Column
+
+    @Column(nullable = false)
     private Integer postCount = 0;
 
-    /*private List<Post> posts;
-    @Column
-    private List<User> followers;
-    @Column
-    private List<User> following;*/
+    // One user can have many posts
+    @OneToMany(mappedBy = "author")
+    @JsonIgnoreProperties("author")
+    private List<Post> posts;
 
-    // Account status
-    @Column
+    // One user can have many comments
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("author")
+    private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("user")
+    private Set<UserLike> likes;
+
+    // Many-to-Many relationship for followers and following
+    @ManyToMany
+    @JoinTable(
+            name = "user_followers",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "follower_id")
+    )
+    @JsonIgnoreProperties({"followers", "following"})
+    private Set<User> followers;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_following",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "following_id")
+    )
+    @JsonIgnoreProperties({"followers", "following"})
+    private Set<User> following;
+
+    @Column(nullable = false)
     private boolean isActive = true;
-    @Column
+
+    @Column(nullable = false)
     private boolean isSuspended = false;
-
-    public void setIsActive(boolean active) {
-    }
-
-    public void setIsSuspended(boolean suspended) {
-    }
 }

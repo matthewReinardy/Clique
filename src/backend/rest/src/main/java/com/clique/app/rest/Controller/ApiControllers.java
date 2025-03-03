@@ -56,8 +56,6 @@ public class ApiControllers {
         updatedUser.setFollowerCount(user.getFollowerCount());
         updatedUser.setFollowingCount(user.getFollowingCount());
         updatedUser.setPostCount(user.getPostCount());
-        updatedUser.setIsActive(user.isActive());
-        updatedUser.setIsSuspended(user.isSuspended());
 
         // Save the updated user to the database
         userRepo.save(updatedUser);
