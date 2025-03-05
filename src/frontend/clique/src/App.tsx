@@ -1,8 +1,7 @@
-import './App.css'
 import SideBar from './components/sidebar'
 import { Container, Typography } from "@mui/material";
 
-function App() {
+export default function App() {
   return (
     <>
     <Container>
@@ -20,4 +19,3 @@ function App() {
   )
 }
 
-export default App
