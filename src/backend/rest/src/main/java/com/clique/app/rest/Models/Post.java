@@ -19,9 +19,10 @@ import java.util.List;
 @AllArgsConstructor
 public class Post {
 
+    // id for Post
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Changed to match User ID type
+    private Long id;
 
     // Ensures each post is linked to a user
     @ManyToOne
@@ -29,12 +30,15 @@ public class Post {
     @JsonIgnoreProperties("posts")
     private User author;
 
+    // Caption of a post, setting a limit
     @Column(nullable = false, length = 500)
     private String content;
 
+    // Link to users local image
     @Column(nullable = true)
     private String mediaURL;
 
+    // Time post was created at
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -43,6 +47,7 @@ public class Post {
     @JsonIgnoreProperties("post")
     private List<Comment> comments;
 
+    // One Post can have many likes
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("post")
     private List<UserLike> likes;
@@ -50,9 +55,7 @@ public class Post {
     @Column(nullable = false)
     private Integer shareCount = 0;
 
-    /*
-    Auto-calculate like & comment count instead of storing static values
-     */
+    // Dynamically calculates and returns the like count for this specific Post
     public int getLikeCount() {
         if (likes == null) {
             return 0;
@@ -60,6 +63,7 @@ public class Post {
         return likes.size();
     }
 
+    // Dynamically calculates and returns the comment count for this specific Post
     public int getCommentCount() {
         if (comments == null) {
             return 0;
@@ -67,6 +71,7 @@ public class Post {
         return comments.size();
     }
 
+    // Sets the creation time for the post
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
