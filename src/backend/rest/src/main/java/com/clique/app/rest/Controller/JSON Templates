@@ -1,0 +1,51 @@
+User Template
+{
+  "id": null,
+  "firstName": "",
+  "lastName": "",
+  "username": "",
+  "email": "",
+  "password": "",
+  "phoneNumber": "",
+  "dateOfBirth": "YYYY-MM-DD",
+  "bio": "",
+  "location": "",
+  "isPrivate": false,
+  "isVerified": false,
+  "profilePicture": "",
+  "accountType": "user",
+  "interests": [],
+  "followerCount": 0,
+  "followingCount": 0,
+  "postCount": 0,
+  "posts": [],
+  "claims": [],
+  "followers": [],
+  "following": [],
+  "active": true,
+  "suspended": false
+}
+
+Post Template
+{
+  "id": null,
+  "content": "",
+  "mediaURL": "",
+  "createdAt": "",
+  "comments": [],
+  "likes": [],
+  "shareCount": 0,
+  "commentCount": 0,
+  "likeCount": 0
+}
+
+Comment Template
+{
+    "author": {
+        "id": ""
+    },
+    "post": {
+        "id": ""
+    },
+    "content": ""
+}

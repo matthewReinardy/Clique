@@ -1,5 +1,7 @@
 package com.clique.app.rest.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,17 +18,17 @@ import java.util.List;
 @AllArgsConstructor
 public class Comment {
 
+    // Comment ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Comment ID
+    private Long id;
 
     // Foreign Key to User
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false) // Foreign key to User (author of the comment)
-    private User author;
+    @Column(name = "author_id", nullable = false)
+    private Long authorId;
 
     @Column(nullable = false, length = 500)
-    private String content; // Comment content
+    private String content;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -34,10 +36,12 @@ public class Comment {
     // Foreign Key to Post (each comment is associated with a post)
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
+    @JsonIgnoreProperties("comments")
     private Post post;
 
     // One Comment can have many Likes
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("comment")
     private List<UserLike> likes;
 
     public int getLikeCount() {
