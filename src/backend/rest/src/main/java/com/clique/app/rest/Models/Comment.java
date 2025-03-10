@@ -24,10 +24,8 @@ public class Comment {
     private Long id;
 
     // Foreign Key to User
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    @JsonIgnoreProperties("comments")
-    private User author;
+    @Column(name = "author_id", nullable = false)
+    private Long authorId;
 
     @Column(nullable = false, length = 500)
     private String content;
@@ -43,6 +41,7 @@ public class Comment {
 
     // One Comment can have many Likes
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("comment")
     private List<UserLike> likes;
 
     public int getLikeCount() {

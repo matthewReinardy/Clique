@@ -43,8 +43,8 @@ public class Post {
     private LocalDateTime createdAt;
 
     // One Post can have many Comments
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("post")
+    @OneToMany(mappedBy = "post")
+    @JsonIgnoreProperties({"post", "author"})
     private List<Comment> comments;
 
     // One Post can have many likes

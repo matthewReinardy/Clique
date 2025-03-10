@@ -8,34 +8,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-public class ApiControllers {
+@RequestMapping("/users")
+public class UserController {
 
-    // Creating a
+    // Referencing the repository
     @Autowired
     private UserRepo userRepo;
 
-    // GetMapping annotation maps to the HTTP GET request
-    // Get
-    //@GetMapping(value = "/")
-    //public String getPage() {
-    //    return "Welcome";
-    //}
-
-    // Returning a list of all of the current users
-    // Using HTTP GET request to "/users"
-    @GetMapping(value = "/users")
-    public List<User> getUsers() {
+    // Get all users
+    @GetMapping
+    public List<User> getAllUsers() {
         return userRepo.findAll();
     }
 
-    // Maps to HTTP POST, creates a new user with a confirmation message
+    // Creating a new user
     @PostMapping(value = "/save")
     public String saveUser(@RequestBody User user) {
         userRepo.save(user);
         return "Saved...";
     }
 
-    // Put HTTP Request, updates the user data with the specified id in "update/{id}"
+    // Updating a user
     @PutMapping(value = "update/{id}")
     public String updateUser(@PathVariable Long id, @RequestBody User user) {
         User updatedUser = userRepo.findById(id).get();
@@ -59,12 +52,10 @@ public class ApiControllers {
 
         // Save the updated user to the database
         userRepo.save(updatedUser);
-
         return "User updated successfully!";
-
     }
 
-    // Delete HTTP Request, deleting by which id is provided in "/delete/{id}
+    // Deleting a user
     @DeleteMapping(value = "/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         User deletedUser = userRepo.findById(id).get();
