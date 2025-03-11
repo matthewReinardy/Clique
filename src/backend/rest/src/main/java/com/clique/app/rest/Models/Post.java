@@ -36,11 +36,12 @@ public class Post {
 
     // Link to users local image
     @Column(nullable = true)
-    private String mediaURL;
+    private String mediaFileName;
 
     // Time post was created at
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
 
     // One Post can have many Comments
     @OneToMany(mappedBy = "post")
