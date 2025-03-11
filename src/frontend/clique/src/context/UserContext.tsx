@@ -5,11 +5,12 @@ interface User {
     id: number,
     firstName: string,
     lastName: string,
+    username: string,
     email: string,
     //password: string,
     //phoneNumber: string,
     //dateOfBirth: string,
-    //bio: string,
+    bio: string,
     //location: string,
     //isPrivate: boolean,
     //isVerified: boolean,
@@ -22,6 +23,7 @@ interface User {
     //posts: Array<Post>,
     //comments: Array<Comment>
     //userLike: Array<Like>
+    website: string
 
 }
 
@@ -38,11 +40,11 @@ const UserContext = createContext<UserContextType | undefined>(undefined)
 //Mock User data
 const mockUsers: User[] = [
 
-    {id: 1, firstName: 'Lily', lastName: 'Broman', email: 'lilybroman@example.com', profilePicture: './assets/temp-profile-pics/lily-profile-pic.png', accountType: 'user', followerCount: 20, followingCount: 51, postCount: 2},
-    {id: 2, firstName: 'Ben', lastName: 'Broman', email: 'benbroman@example.com', profilePicture: './assets/temp-profile-pics/lily-profile-pic.png', accountType: 'user', followerCount: 401, followingCount: 20, postCount: 15},
-    {id: 1, firstName: 'Mya', lastName: 'Broman', email: 'myabroman@example.com', profilePicture: './assets/temp-profile-pics/lily-profile-pic.png', accountType: 'user', followerCount: 99, followingCount: 72, postCount: 10},
-    {id: 1, firstName: 'Sarah', lastName: 'Broman', email: 'sarahbroman@example.com', profilePicture: './assets/temp-profile-pics/lily-profile-pic.png', accountType: 'user', followerCount: 52, followingCount: 23, postCount: 22},
-    {id: 1, firstName: 'Peter', lastName: 'Cronen', email: 'petercronen@example.com', profilePicture: './assets/temp-profile-pics/lily-profile-pic.png', accountType: 'user', followerCount: 553, followingCount: 3, postCount: 4}
+    {id: 1, firstName: 'Lily', lastName: 'Broman', username: 'lilybee05', email: 'lilybroman@example.com', bio: 'I love to play volleyball!', profilePicture: '/assets/temp-profile-pics/lily-profile-pic.png', accountType: 'user', followerCount: 20, followingCount: 51, postCount: 2, website: 'https://github.com/matthewReinardy/Clique'},
+    {id: 2, firstName: 'Ben', lastName: 'Broman', username: 'bennyboi5', email: 'benbroman@example.com', bio: 'I am a senior software developer.', profilePicture: '/assets/temp-profile-pics/lily-profile-pic.png', accountType: 'user', followerCount: 401, followingCount: 20, postCount: 15, website: 'https://github.com/matthewReinardy/Clique'},
+    {id: 3, firstName: 'Mya', lastName: 'Broman', username: 'beesqr95', email: 'myabroman@example.com', bio: 'AVVB, Hammerhead VB', profilePicture: '/assets/temp-profile-pics/lily-profile-pic.png', accountType: 'user', followerCount: 99, followingCount: 72, postCount: 10, website: 'https://github.com/matthewReinardy/Clique'},
+    {id: 4, firstName: 'Sarah', lastName: 'Broman', username: 'sarbro3421', email: 'sarahbroman@example.com', bio: 'Self-employed interior designer and mom of 2!', profilePicture: '/assets/temp-profile-pics/lily-profile-pic.png', accountType: 'user', followerCount: 52, followingCount: 23, postCount: 22, website: 'https://github.com/matthewReinardy/Clique'},
+    {id: 5, firstName: 'Peter', lastName: 'Cronen', username: 'skill1234', email: 'petercronen@example.com', bio: 'Passion for photography :D', profilePicture: '/assets/temp-profile-pics/lily-profile-pic.png', accountType: 'user', followerCount: 553, followingCount: 3, postCount: 4, website: 'https://github.com/matthewReinardy/Clique'}
 ]
 
 export function UserProvider({children} : {children: React.ReactNode}) { //Type is anything can that be rendered in React

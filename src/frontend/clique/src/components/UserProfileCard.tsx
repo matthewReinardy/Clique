@@ -1,14 +1,55 @@
 import { useUser } from "../context/UserContext";
-import { Card, CardContent, Typography } from "@mui/material"
+import { Card, CardContent, CardMedia, Typography, Button } from "@mui/material"
+
+// interface ProfileCardProps {
+//     username: string,
+//     bio: string,
+//     followerCount: number,
+//     followingCount: number,
+//     postCount: number,
+//     profilePicture: string
+//     website: string
+// }
 
 export default function UserProfileCard() {
 
-    const {users, loading, error} = useUser()
+    const {users, loading, error} = useUser() //Access user data from context
+
+    //Handle loading state:
+    if (loading) {
+        return <Typography>Loading...</Typography>
+    }
+
+    //Handle error state:
+    if (error) {
+        return <Typography>Error: {error}</Typography>
+    }
 
     return (
-        <Card>
-            <Typography>Hi!</Typography>
-
-        </Card>
-      );
+        <div>
+            {users.map((user) => (
+                <Card key={user.id}>
+                    <CardMedia
+                        component="img" 
+                        image={user.profilePicture}
+                        alt={`${user.username}'s profile picture`} 
+                        style={{ width: "100%", height: "auto", objectFit: "cover" }}
+                    />
+                    <CardContent>
+                        <Typography>{user.username}</Typography>
+                        <Typography>{user.bio}</Typography>
+                        <Typography>Followers: {user.followerCount}</Typography>
+                        <Typography>Following: {user.followingCount}</Typography>
+                        <Typography>Posts: {user.postCount}</Typography>
+                        <Typography>
+                            <a href={user.website} target="_blank">
+                                Visit User Website
+                            </a>
+                        </Typography>
+                    </CardContent>
+                    <Button variant="contained">Edit Profile</Button>
+                </Card>
+            ))}
+        </div>
+    )
 }
