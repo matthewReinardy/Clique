@@ -41,6 +41,7 @@ public class User {
     @Column
     private String phoneNumber;
 
+    // PFP,
     @Column
     private LocalDate dateOfBirth;
 
@@ -79,17 +80,12 @@ public class User {
     @JsonIgnoreProperties("author")
     private List<Post> posts;
 
-    // One user can have many comments
-
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("author")
-    private Set<Comment> comments;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    // One-to-Many relationship, User can have many HelpCenterClaims
+    @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties("user")
-    private Set<UserLike> likes;
+    private List<HelpCenterClaim> claims;
 
-    // Many-to-Many relationship for followers and following
+    // Many-to-Many relationship for followers
     @ManyToMany
     @JoinTable(
             name = "user_followers",
@@ -99,6 +95,7 @@ public class User {
     @JsonIgnoreProperties({"followers", "following"})
     private Set<User> followers;
 
+    // Many-to-Many relationship for following
     @ManyToMany
     @JoinTable(
             name = "user_following",
