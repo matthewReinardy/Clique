@@ -1,16 +1,6 @@
 import { useUser } from "../context/UserContext";
 import { Card, CardContent, CardMedia, Typography, Button } from "@mui/material"
 
-// interface ProfileCardProps {
-//     username: string,
-//     bio: string,
-//     followerCount: number,
-//     followingCount: number,
-//     postCount: number,
-//     profilePicture: string
-//     website: string
-// }
-
 export default function UserProfileCard() {
 
     const {users, loading, error} = useUser() //Access user data from context

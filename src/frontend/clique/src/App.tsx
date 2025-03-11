@@ -1,6 +1,6 @@
 import SideBar from './components/sidebar'
 import UserProfileCard from './components/UserProfileCard'
-import { Container, Typography } from "@mui/material"
+import { Container } from "@mui/material"
 import { UserProvider } from './context/UserContext'
 
 export default function App() {
@@ -8,17 +8,8 @@ export default function App() {
     <>
     <UserProvider>
       <Container>
-
         <UserProfileCard />
-
-        {/* <SideBar/>  */} 
-        {/* Below is an example strcture - Lily */}
-        {/* <Typography 
-          variant='h1' 
-          sx={{}}>
-          Clique
-        </Typography> */}
-
+        <SideBar/>  
       </Container>
     </UserProvider>
     </>
