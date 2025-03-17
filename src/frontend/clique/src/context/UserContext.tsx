@@ -76,28 +76,36 @@ export function UserProvider({children} : {children: React.ReactNode}) { //Type 
     // }, [])
 
     useEffect(() => {
-        const fetchUsers = async ()=> {
+        const fetchUsers = async () => {
             try {
-                setLoading(true)
-                setError(null)
-
-                const response = await fetch('http://localhost:8080/users') //Java API
-
+                setLoading(true);
+                setError(null);
+    
+                const response = await fetch('http://localhost:8080/users'); //Java API Call
+    
                 if (!response.ok) {
-                    throw new Error("Failed to fetch users!")
+                    throw new Error(`HTTP error! Status: ${response.status}`);  
                 }
-
-                const data: User[] = await response.json()
-                setUsers(data)
-            } catch {
-                setError("Failed to load users.")
+    
+                const data: User[] = await response.json();
+                console.log("Fetched users:", data);
+                setUsers(data);
+            } catch (error: unknown) {  
+                if (error instanceof Error) {
+                    setError(error.message) 
+                } else if (typeof error === 'string') {
+                    setError(error)
+                } else {
+                    setError("An unknown error occurred.");
+                }
+                console.error("Error fetching users:", error)
             } finally {
                 setLoading(false)
             }
-        }
-
-        fetchUsers()
-    }, [])
+        };
+    
+        fetchUsers();
+    }, []);  // Empty dependency array to run only on mount
 
     return (
         
