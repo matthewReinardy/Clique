@@ -1,7 +1,15 @@
 package com.clique.app.rest.Models;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class HelpCenterClaim {
 
     // Types of issues users can report
@@ -17,75 +25,33 @@ public class HelpCenterClaim {
         IN_PROGRESS,
         CLOSED,
     }
+
     // PK
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     // FK (From User class)
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    //Claim details
+    // Claim details
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private IssueType issueType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
+
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // Construct
-    public HelpCenterClaim(Integer id, User user, String description, IssueType issueType, Status status, LocalDateTime createdAt) {
-        this.id = id;
-        this.user = user;
-        this.description = description;
-        this.issueType = issueType;
-        this.status = status;
-        this.createdAt = createdAt;
-    }
-
-    //Getters
-    public Integer getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public IssueType getIssueType() {
-        return issueType;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-     // Setters
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setIssueType(IssueType issueType) {
-        this.issueType = issueType;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 }

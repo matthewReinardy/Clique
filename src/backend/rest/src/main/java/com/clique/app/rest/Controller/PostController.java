@@ -4,9 +4,12 @@ import com.clique.app.rest.Models.Post;
 import com.clique.app.rest.Models.User;
 import com.clique.app.rest.Repo.PostRepo;
 import com.clique.app.rest.Repo.UserRepo;
+import com.clique.app.rest.Service.FileStorageSystem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +23,9 @@ public class PostController {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private FileStorageSystem fileStorageSystem;
 
     // Get all posts
     @GetMapping
@@ -35,20 +41,37 @@ public class PostController {
 
     // Create a new post (Fix the mapping here)
     @PostMapping("/save")
-    public String createPost(@RequestBody Post post) {
+    public String createPost(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("content") String content,
+            @RequestParam("authorId") Long authorId) {
+
         // Check if the user exists
-        User author = userRepo.findById(post.getAuthor().getId())
+        User author = userRepo.findById(authorId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        // Store the file and get its filename
+        String fileName;
+        try {
+            fileName = fileStorageSystem.storeFile(file);
+        } catch (IOException e) {
+            return "File upload failed: " + e.getMessage();
+        }
+
+        // Create and save the post
+        Post post = new Post();
         post.setAuthor(author);
-        post.setCreatedAt(LocalDateTime.now()); // Set this if @PrePersist isn't working
+        post.setContent(content);
+        post.setMediaFileName(fileName); // Store filename instead of full URL
+        post.setCreatedAt(LocalDateTime.now());
+
         postRepo.save(post);
 
         return "Post created successfully!";
     }
 
     // Update an existing post by ID
-    @PutMapping("/{id}")
+   /* @PutMapping("/{id}")
     public String updatePost(@PathVariable Long id, @RequestBody Post postDetails) {
         Post post = postRepo.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
         post.setContent(postDetails.getContent());
@@ -57,7 +80,7 @@ public class PostController {
 
         postRepo.save(post);
         return "Post updated successfully!";
-    }
+    } */
 
     // Delete a post by ID
     @DeleteMapping("/{id}")

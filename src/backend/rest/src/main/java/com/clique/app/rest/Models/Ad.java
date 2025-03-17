@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.awt.image.BufferedImage;
-
 @Entity
 @Getter
 @Setter
@@ -17,7 +15,7 @@ public class Ad {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false)
     private boolean display;
@@ -25,12 +23,7 @@ public class Ad {
     @Column(nullable = false)
     private boolean isApproved;
 
-    // Foreign key reference to User
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    // Store image URL instead of BufferedImage
+    // Store image URL as String (mediaUrl)
     @Column(nullable = false)
     private String mediaUrl;
 }
