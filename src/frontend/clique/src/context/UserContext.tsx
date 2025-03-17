@@ -54,17 +54,41 @@ export function UserProvider({children} : {children: React.ReactNode}) { //Type 
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
 
+    // useEffect(() => {
+
+    //     const fetchMockData = async () => {
+
+    //         try {
+    //             setLoading(true)
+    //             setError(null)
+
+    //             //Simulates API call delay
+    //             await new Promise((resolve) => setTimeout(resolve, 1000)) 
+    //             setUsers(mockUsers)
+    //         } catch {
+    //             setError("Failed to load users.")
+    //         } finally {
+    //             setLoading(false)
+    //         }
+    //     }
+
+    //     fetchMockData();
+    // }, [])
+
     useEffect(() => {
-
-        const fetchMockData = async () => {
-
+        const fetchUsers = async ()=> {
             try {
                 setLoading(true)
                 setError(null)
 
-                //Simulates API call delay
-                await new Promise((resolve) => setTimeout(resolve, 1000)) 
-                setUsers(mockUsers)
+                const response = await fetch('http://localhost:8080/users') //Java API
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch users!")
+                }
+
+                const data: User[] = await response.json()
+                setUsers(data)
             } catch {
                 setError("Failed to load users.")
             } finally {
@@ -72,7 +96,7 @@ export function UserProvider({children} : {children: React.ReactNode}) { //Type 
             }
         }
 
-        fetchMockData();
+        fetchUsers()
     }, [])
 
     return (
