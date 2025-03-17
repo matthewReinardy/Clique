@@ -65,10 +65,6 @@ public class PostController {
         post.setMediaFileName(fileName); // Store filename instead of full URL
         post.setCreatedAt(LocalDateTime.now());
 
-        System.out.println("File: " + file.getOriginalFilename());
-        System.out.println("Content: " + content);
-        System.out.println("Author ID: " + authorId);
-
         postRepo.save(post);
 
         return "Post created successfully!";
