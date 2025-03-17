@@ -1,20 +1,17 @@
 import SideBar from './components/sidebar'
-import { Container, Typography } from "@mui/material";
+import UserProfileCard from './components/UserProfileCard'
+import { Container } from "@mui/material"
+import { UserProvider } from './context/UserContext'
 
 export default function App() {
   return (
     <>
-    <Container>
-
-      <SideBar/>
-      {/* Below is an example strcture - Lily */}
-      <Typography 
-        variant='h1' 
-        sx={{}}>
-        Clique
-      </Typography>
-
-    </Container>
+    <UserProvider>
+      <Container>
+        <UserProfileCard />
+        <SideBar/>  
+      </Container>
+    </UserProvider>
     </>
   )
 }
