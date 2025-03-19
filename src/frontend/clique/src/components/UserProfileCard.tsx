@@ -1,9 +1,9 @@
-import { useUser } from "../context/UserContext";
+import { useUserContext } from "../context/UserContext";
 import { Card, CardContent, CardMedia, Typography, Button } from "@mui/material"
 
 export default function UserProfileCard() {
 
-    const {users, loading, error} = useUser() //Access user data from context
+    const {users, loading, error} = useUserContext() //Access user data from context
 
     //Handle loading state:
     if (loading) {
@@ -31,11 +31,11 @@ export default function UserProfileCard() {
                         <Typography>Followers: {user.followerCount}</Typography>
                         <Typography>Following: {user.followingCount}</Typography>
                         <Typography>Posts: {user.postCount}</Typography>
-                        <Typography>
+                        {/* <Typography>
                             <a href={user.website} target="_blank">
                                 Visit User Website
                             </a>
-                        </Typography>
+                        </Typography> */}
                     </CardContent>
                     <Button variant="contained">Edit Profile</Button>
                 </Card>
