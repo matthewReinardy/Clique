@@ -1,7 +1,47 @@
 import { makeRequest } from "./apiService"
-import { ApiResponse, User } from "../types/userTypes"
+import { ApiResponse, User, UserId, UserCreationRequest } from "../types/userTypes"
 
-//Retrieves a list of all users:
+//GET a list of all users:
 export const fetchUsers = (): Promise<ApiResponse<User[]>> => {
     return makeRequest<User[]>('users', 'GET')
+}
+
+//CREATE a new user based on user defined data:
+export const createUser = (
+    user?: UserCreationRequest
+): Promise<ApiResponse<User>> => {
+    
+    if (!user) {
+        throw new Error('User data is required to CREATE a new user. PLease enter valid user data.')
+    }
+    
+    return makeRequest<User>('users', 'POST', user)
+}
+
+//UPDATE an existing user by ID:
+export const updateUser = (
+    userId?: UserId,
+    user?: Partial<UserCreationRequest>                
+): Promise<ApiResponse<User>> => {
+
+    if (!userId) {
+        throw new Error('User ID is required to UPDATE a user.')
+    }
+    if (!user) {
+        throw new Error('In order to update a user, user data is required.')
+    }
+
+    return makeRequest<User>(`users/${userId}`, 'PUT', user)
+}
+
+//DELETE an existing user by ID:
+export const deleteUser = (
+    userId?: UserId 
+): Promise<ApiResponse<User>> => {
+
+    if (!userId) {
+        throw new Error('User ID is required to DELETE a user.')
+    }
+
+    return makeRequest<User>(`users/${userId}`, 'DELETE')
 }
