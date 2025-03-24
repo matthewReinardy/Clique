@@ -3,13 +3,13 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import React from 'react';
 
-export interface CreatePostDialogProps {
+export interface SelectPhotoDialogProps {
     open: boolean;
     onClose: () => void;
     onUpload: () => void;
 }
 
-const SelectPhotoDialog: React.FC<CreatePostDialogProps> = ({ open, onClose, onUpload }) => {
+const SelectPhotoDialog: React.FC<SelectPhotoDialogProps> = ({ open, onClose, onUpload }) => {
     return (
         <Dialog onClose={onClose} open={open}>
             <DialogTitle>Create New Post</DialogTitle>

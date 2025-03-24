@@ -22,7 +22,6 @@ export default function SideBar() {
   const closePhotoModal = () => setPhotoModalOpen(false);
 
   const openPostModal = () => {
-    setPhotoModalOpen(false); //close photo modal
     setPostModalOpen(true);   //open create post modal
   };
 
