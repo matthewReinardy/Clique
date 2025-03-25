@@ -11,12 +11,17 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import SelectPhotoDialog from './SelectPhotoModal';
 import CreatePostDialog from './CreatePostModal';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export default function SideBar() {
   //define state
   const [photoModalOpen, setPhotoModalOpen] = useState(false);
   const [postModalOpen, setPostModalOpen] = useState(false);
+
+  const handleOnShare = () => {
+    setPhotoModalOpen(false)
+    setPostModalOpen(false)
+  }
 
   const openPhotoModal = () => setPhotoModalOpen(true);
   const closePhotoModal = () => setPhotoModalOpen(false);
@@ -55,7 +60,7 @@ export default function SideBar() {
       <SelectPhotoDialog open={photoModalOpen} onClose={closePhotoModal} onUpload={openPostModal} />
 
       {/* modal to create a post */}
-      <CreatePostDialog open={postModalOpen} onClose={closePostModal} />
+      <CreatePostDialog open={postModalOpen} onClose={closePostModal} onShare={handleOnShare} />
     </div>
 
   );

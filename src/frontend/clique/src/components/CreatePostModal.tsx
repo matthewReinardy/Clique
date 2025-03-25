@@ -1,17 +1,25 @@
 import { Box, Button, DialogContent, Divider, IconButton, TextField, Typography } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@mui/material/Grid2';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useUserContext } from '../context/UserContext';
+import { loggedInUserId } from '../types/loggedInUser';
 
 export interface CreatePostDialogProps {
     open: boolean;
     onClose: () => void;
+    onShare: () => void;
   }
 
-  const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ open, onClose }) => {
+  const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ open, onClose, onShare }) => {
+    const {users} = useUserContext()
+    const loggedInUser = users.find((element) => element.id === loggedInUserId)
+
+    const [showLocationTextbox, setShowLocationTextbox] = useState(false)
+    const [showTagsTextbox, setShowTagsTextbox] = useState(false)
 
     return (
       <Dialog fullWidth onClose={onClose} open={open}>
@@ -21,10 +29,11 @@ export interface CreatePostDialogProps {
             <ArrowBackIcon/>
             </IconButton>
             <Typography>Create New Post</Typography>
-            <Button>Share</Button>
+            <Button onClick={onShare}>Share</Button>
           </Box>
           <Divider/>
           </DialogTitle>
+
         <DialogContent>
           <Grid container>
             {/* uploaded photo */}
@@ -35,7 +44,7 @@ export interface CreatePostDialogProps {
             <Grid size={4}>
               <Box sx={{display: 'flex'}}>
                 <AccountCircleIcon/>
-                <Typography>username</Typography>
+                <Typography>{loggedInUser?.username}</Typography>
               </Box>
               <TextField
                 id="outlined-multiline-static"
@@ -45,8 +54,14 @@ export interface CreatePostDialogProps {
                 sx={{marginTop: 2}}
               />
               <Divider sx={{marginTop: 2}}/>
-              <Button>Add location</Button>
-              <Button>Add tags</Button>
+              <Button onClick={() => setShowLocationTextbox(true)}>Add location</Button>
+              {showLocationTextbox && (
+                <TextField />
+              )}
+              <Button onClick={() => setShowTagsTextbox(true)}>Add tags</Button>
+              {showTagsTextbox && (
+                <TextField />
+              )}
               <Divider/>
             </Grid>
           </Grid>
