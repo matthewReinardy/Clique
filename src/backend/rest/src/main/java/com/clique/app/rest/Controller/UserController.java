@@ -30,25 +30,27 @@ public class UserController {
 
     // Updating a user
     @PutMapping(value = "update/{id}")
-    public String updateUser(@PathVariable Long id, @RequestBody User user) {
-        User updatedUser = userRepo.findById(id).get();
+    public String updateUser(@PathVariable String id, @RequestBody User user) {
+        Long userId = Long.parseLong(id);
+
+        User updatedUser = userRepo.findById(userId).get();
         updatedUser.setFirstName(user.getFirstName());
         updatedUser.setLastName(user.getLastName());
         updatedUser.setPhoneNumber(user.getPhoneNumber());
-        updatedUser.setDateOfBirth(user.getDateOfBirth());
+        // updatedUser.setDateOfBirth(user.getDateOfBirth());
         updatedUser.setBio(user.getBio());
-        updatedUser.setLocation(user.getLocation());
+        // updatedUser.setLocation(user.getLocation());
         updatedUser.setUsername(user.getUsername());
         updatedUser.setEmail(user.getEmail());
-        updatedUser.setPassword(user.getPassword());
-        updatedUser.setIsPrivate(user.getIsPrivate());
-        updatedUser.setIsVerified(user.getIsVerified());
-        updatedUser.setProfilePicture(user.getProfilePicture());
-        updatedUser.setAccountType(user.getAccountType());
-        updatedUser.setInterests(user.getInterests());
-        updatedUser.setFollowerCount(user.getFollowerCount());
-        updatedUser.setFollowingCount(user.getFollowingCount());
-        updatedUser.setPostCount(user.getPostCount());
+        // updatedUser.setPassword(user.getPassword());
+        // updatedUser.setIsPrivate(user.getIsPrivate());
+        // updatedUser.setIsVerified(user.getIsVerified());
+        // updatedUser.setProfilePicture(user.getProfilePicture());
+        // updatedUser.setAccountType(user.getAccountType());
+        // updatedUser.setInterests(user.getInterests());
+        // updatedUser.setFollowerCount(user.getFollowerCount());
+        // updatedUser.setFollowingCount(user.getFollowingCount());
+        // updatedUser.setPostCount(user.getPostCount());
 
         // Save the updated user to the database
         userRepo.save(updatedUser);
