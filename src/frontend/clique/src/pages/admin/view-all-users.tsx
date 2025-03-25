@@ -77,7 +77,6 @@ export default function UserList() {
             alert(`The user with the id of ${user.id} (${user.username}) has been successfully updated!}`)
         } catch (error) {
             console.error("Error updating user:", error) 
-            alert("There was an error updating the user. Please try again later.")
         }
         
     }
@@ -114,8 +113,14 @@ export default function UserList() {
                 ))}
             </List>
 
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Edit User Information</DialogTitle>
+            <Dialog 
+                open={open} 
+                onClose={handleClose}
+                aria-labelledby='edit-user-dialog'
+                disableEnforceFocus
+                disableRestoreFocus
+            >
+                <DialogTitle id='edit-user-dialog'>Edit User Information</DialogTitle>
                 <DialogContent>
                     <TextField
                         label="First name"
@@ -123,6 +128,7 @@ export default function UserList() {
                         onChange={(e) => handleChange('firstName', e.target.value)}
                         fullWidth
                         margin="normal"
+                        autoFocus
                     />
                     <TextField
                         label="Last name"
