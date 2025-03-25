@@ -30,8 +30,10 @@ public class UserController {
 
     // Updating a user
     @PutMapping(value = "update/{id}")
-    public String updateUser(@PathVariable Long id, @RequestBody User user) {
-        User updatedUser = userRepo.findById(id).get();
+    public String updateUser(@PathVariable String id, @RequestBody User user) {
+        Long userId = Long.parseLong(id);
+
+        User updatedUser = userRepo.findById(userId).get();
         updatedUser.setFirstName(user.getFirstName());
         updatedUser.setLastName(user.getLastName());
         updatedUser.setPhoneNumber(user.getPhoneNumber());
