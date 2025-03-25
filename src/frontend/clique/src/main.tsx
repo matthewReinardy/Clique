@@ -37,6 +37,7 @@ const theme = createTheme({
       blackBean: "401201",
     },
   },
+
 })
 
 createRoot(document.getElementById('root')!).render(

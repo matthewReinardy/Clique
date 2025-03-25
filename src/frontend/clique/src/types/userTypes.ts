@@ -48,12 +48,12 @@ export interface UserCreationRequest {
     // profilePicture: string //Not supported as of 3/18/25
 }
 
-export interface UserUpdateRequest {
-    firstName?: string,
-    username?: string,
-    phoneNumber?: string,
-    email?: string,
-    bio?: string,
-    website?: string,
-    // profilePicture: string //Not supported as of 3/18/25
+export const defaultUser: User = {
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    phoneNumber: "",
+    website: "",
+    bio: "",
 }
