@@ -43,5 +43,8 @@ export const deleteUser = (
         throw new Error('User ID is required to DELETE a user.')
     }
 
-    return makeRequest<User>(`users/${userId}`, 'DELETE')
+    //Unbrands the UserId type 
+    const rawUserId: number = userId as number
+
+    return makeRequest<User>(`users/delete/${rawUserId.toString()}`, 'DELETE')
 }
