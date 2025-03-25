@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 @RequestMapping("/users")
 public class UserController {
 
@@ -31,36 +30,41 @@ public class UserController {
 
     // Updating a user
     @PutMapping(value = "update/{id}")
-    public String updateUser(@PathVariable Long id, @RequestBody User user) {
-        User updatedUser = userRepo.findById(id).get();
+    public String updateUser(@PathVariable String id, @RequestBody User user) {
+        Long userId = Long.parseLong(id);
+
+        User updatedUser = userRepo.findById(userId).get();
         updatedUser.setFirstName(user.getFirstName());
         updatedUser.setLastName(user.getLastName());
         updatedUser.setPhoneNumber(user.getPhoneNumber());
-        updatedUser.setDateOfBirth(user.getDateOfBirth());
+        // updatedUser.setDateOfBirth(user.getDateOfBirth());
         updatedUser.setBio(user.getBio());
-        updatedUser.setLocation(user.getLocation());
+        // updatedUser.setLocation(user.getLocation());
         updatedUser.setUsername(user.getUsername());
         updatedUser.setEmail(user.getEmail());
-        updatedUser.setPassword(user.getPassword());
-        updatedUser.setIsPrivate(user.getIsPrivate());
-        updatedUser.setIsVerified(user.getIsVerified());
-        updatedUser.setProfilePicture(user.getProfilePicture());
-        updatedUser.setAccountType(user.getAccountType());
-        updatedUser.setInterests(user.getInterests());
-        updatedUser.setFollowerCount(user.getFollowerCount());
-        updatedUser.setFollowingCount(user.getFollowingCount());
-        updatedUser.setPostCount(user.getPostCount());
+        // updatedUser.setPassword(user.getPassword());
+        // updatedUser.setIsPrivate(user.getIsPrivate());
+        // updatedUser.setIsVerified(user.getIsVerified());
+        // updatedUser.setProfilePicture(user.getProfilePicture());
+        // updatedUser.setAccountType(user.getAccountType());
+        // updatedUser.setInterests(user.getInterests());
+        // updatedUser.setFollowerCount(user.getFollowerCount());
+        // updatedUser.setFollowingCount(user.getFollowingCount());
+        // updatedUser.setPostCount(user.getPostCount());
 
         // Save the updated user to the database
         userRepo.save(updatedUser);
         return "User updated successfully!";
     }
 
-    // Deleting a user
+    //Deleting a user
     @DeleteMapping(value = "/delete/{id}")
-    public String deleteUser(@PathVariable Long id) {
-        User deletedUser = userRepo.findById(id).get();
+    public String deleteUser(@PathVariable String id) {
+        Long userId = Long.parseLong(id);
+
+        User deletedUser = userRepo.findById(userId).get();
         userRepo.delete(deletedUser);
-        return "Delete user with the id " + id + " successfully!";
+        return "Delete user with the id " + userId + " successfully!";
     }
 }
+
