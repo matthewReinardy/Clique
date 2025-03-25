@@ -3,9 +3,12 @@ package com.clique.app.rest.Controller;
 import com.clique.app.rest.Models.User;
 import com.clique.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -30,41 +33,60 @@ public class UserController {
 
     // Updating a user
     @PutMapping(value = "update/{id}")
-    public String updateUser(@PathVariable String id, @RequestBody User user) {
-        Long userId = Long.parseLong(id);
+    public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody User user) {
+        try {
+            Long userId = Long.parseLong(id);
 
-        User updatedUser = userRepo.findById(userId).get();
-        updatedUser.setFirstName(user.getFirstName());
-        updatedUser.setLastName(user.getLastName());
-        updatedUser.setPhoneNumber(user.getPhoneNumber());
-        // updatedUser.setDateOfBirth(user.getDateOfBirth());
-        updatedUser.setBio(user.getBio());
-        // updatedUser.setLocation(user.getLocation());
-        updatedUser.setUsername(user.getUsername());
-        updatedUser.setEmail(user.getEmail());
-        // updatedUser.setPassword(user.getPassword());
-        // updatedUser.setIsPrivate(user.getIsPrivate());
-        // updatedUser.setIsVerified(user.getIsVerified());
-        // updatedUser.setProfilePicture(user.getProfilePicture());
-        // updatedUser.setAccountType(user.getAccountType());
-        // updatedUser.setInterests(user.getInterests());
-        // updatedUser.setFollowerCount(user.getFollowerCount());
-        // updatedUser.setFollowingCount(user.getFollowingCount());
-        // updatedUser.setPostCount(user.getPostCount());
+            // Check if user exists
+            Optional<User> existingUserOptional = userRepo.findById(userId);
+            if (existingUserOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
 
-        // Save the updated user to the database
-        userRepo.save(updatedUser);
-        return "User updated successfully!";
+            User updatedUser = existingUserOptional.get();
+            updatedUser.setFirstName(user.getFirstName());
+            updatedUser.setLastName(user.getLastName());
+            updatedUser.setPhoneNumber(user.getPhoneNumber());
+            // updatedUser.setDateOfBirth(user.getDateOfBirth());
+            updatedUser.setBio(user.getBio());
+            // updatedUser.setLocation(user.getLocation());
+            updatedUser.setUsername(user.getUsername());
+            updatedUser.setEmail(user.getEmail());
+            // updatedUser.setPassword(user.getPassword());
+            // updatedUser.setIsPrivate(user.getIsPrivate());
+            // updatedUser.setIsVerified(user.getIsVerified());
+            // updatedUser.setProfilePicture(user.getProfilePicture());
+            // updatedUser.setAccountType(user.getAccountType());
+            // updatedUser.setInterests(user.getInterests());
+            // updatedUser.setFollowerCount(user.getFollowerCount());
+            // updatedUser.setFollowingCount(user.getFollowingCount());
+            // updatedUser.setPostCount(user.getPostCount());
+
+            // Save the updated user to the database
+            userRepo.save(updatedUser);
+            return ResponseEntity.ok("User updated successfully!");
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user ID format");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update user: " + e.getMessage());
+        }
     }
 
     //Deleting a user
-    @DeleteMapping(value = "/delete/{id}")
-    public String deleteUser(@PathVariable String id) {
-        Long userId = Long.parseLong(id);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        Optional<User> userOptional = userRepo.findById(id);
 
-        User deletedUser = userRepo.findById(userId).get();
-        userRepo.delete(deletedUser);
-        return "Delete user with the id " + userId + " successfully!";
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        try {
+            userRepo.delete(userOptional.get());
+            return ResponseEntity.ok("User deleted successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user");
+        }
     }
 }
 
