@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 @RequestMapping("/users")
 public class UserController {
 
@@ -56,11 +55,14 @@ public class UserController {
         return "User updated successfully!";
     }
 
-    // Deleting a user
+    //Deleting a user
     @DeleteMapping(value = "/delete/{id}")
-    public String deleteUser(@PathVariable Long id) {
-        User deletedUser = userRepo.findById(id).get();
+    public String deleteUser(@PathVariable String id) {
+        Long userId = Long.parseLong(id);
+
+        User deletedUser = userRepo.findById(userId).get();
         userRepo.delete(deletedUser);
-        return "Delete user with the id " + id + " successfully!";
+        return "Delete user with the id " + userId + " successfully!";
     }
 }
+
