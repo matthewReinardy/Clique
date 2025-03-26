@@ -1,10 +1,10 @@
-import { useUserContext } from '../../context/UserContext'
+import { useUserContext } from '../context/UserContext'
 import { useState } from 'react'
 import { Button, Typography, List, ListItem, ListItemText, ListItemAvatar, Avatar, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-import { User, defaultUser } from '../../types/userTypes' 
-import { updateUser } from '../../api/userApi'
+import { User, defaultUser } from '../types/userTypes' 
+import { updateUser } from '../api/userApi'
 
 export default function UserList() {
 
