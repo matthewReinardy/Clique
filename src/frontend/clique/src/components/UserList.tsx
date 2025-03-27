@@ -69,8 +69,9 @@ export default function UserList() {
                 username: userToUpdate.username,
                 email: userToUpdate.email,
                 phoneNumber: userToUpdate.phoneNumber,
-                website: userToUpdate.website,
+                // website: userToUpdate.website,
                 bio: userToUpdate.bio,
+                location: userToUpdate.location
             })
 
             setOpen(false)
@@ -97,7 +98,7 @@ export default function UserList() {
                                     {'\n'}{user.phoneNumber}
                                     {'\n'}{user.email}
                                     {'\n'}{user.bio}
-                                    {'\n'}{user.website}
+                                    {'\n'}{user.location}
                                 </Typography>
                             }
                         />
@@ -158,10 +159,17 @@ export default function UserList() {
                         fullWidth
                         margin="normal"
                     />
-                    <TextField
+                    {/* <TextField
                         label="Website Link"
                         value={selectedUser?.website || ""}
                         onChange={(e) => handleChange('website', e.target.value)}
+                        fullWidth
+                        margin="normal"
+                    /> */}
+                    <TextField
+                        label="Location"
+                        value={selectedUser?.location || ""}
+                        onChange={(e) => handleChange('location', e.target.value)}
                         fullWidth
                         margin="normal"
                     />

@@ -39,7 +39,7 @@ public class UserController {
         updatedUser.setPhoneNumber(user.getPhoneNumber());
         // updatedUser.setDateOfBirth(user.getDateOfBirth());
         updatedUser.setBio(user.getBio());
-        // updatedUser.setLocation(user.getLocation());
+        updatedUser.setLocation(user.getLocation());
         updatedUser.setUsername(user.getUsername());
         updatedUser.setEmail(user.getEmail());
         // updatedUser.setPassword(user.getPassword());

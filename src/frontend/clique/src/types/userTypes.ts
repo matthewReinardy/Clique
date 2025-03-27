@@ -44,7 +44,8 @@ export interface UserCreationRequest {
     phoneNumber: string,
     email: string,
     bio: string,
-    website: string,
+    // website: string,
+    location: string,
     // profilePicture: string //Not supported as of 3/18/25
 }
 
@@ -54,6 +55,7 @@ export const defaultUser: User = {
     username: "",
     email: "",
     phoneNumber: "",
-    website: "",
+    // website: "",
     bio: "",
+    location: "",
 }
