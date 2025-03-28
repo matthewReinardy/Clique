@@ -1,12 +1,14 @@
 import { Box, Button, DialogContent, Divider, IconButton, TextField, Typography } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid2';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useUserContext } from '../context/UserContext';
 import { loggedInUserId } from '../types/loggedInUser';
+import { User, UserId } from '../types/userTypes';
+import { getUserById } from '../api/userApi';
 
 export interface CreatePostDialogProps {
     open: boolean;
@@ -15,11 +17,27 @@ export interface CreatePostDialogProps {
   }
 
   const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ open, onClose, onShare }) => {
-    const {users} = useUserContext()
-    const loggedInUser = users.find((element) => element.id === loggedInUserId)
-
+    const {fetchUserById} = useUserContext();
+    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+    const [content, setContent] = useState<string>('');
     const [showLocationTextbox, setShowLocationTextbox] = useState(false)
     const [showTagsTextbox, setShowTagsTextbox] = useState(false)
+
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const userId = loggedInUserId as UserId;
+          const response = await getUserById(userId);
+          setLoggedInUser(response.data);
+        } catch (error) {
+          setError('Failed to fetch user');
+        }
+      };
+
+      if (open) {
+          fetchUser();
+      }
+  }, [open]);
 
     return (
       <Dialog fullWidth onClose={onClose} open={open}>
@@ -78,3 +96,7 @@ export interface CreatePostDialogProps {
   };
   
   export default CreatePostDialog;
+
+function setError(arg0: string) {
+  throw new Error('Function not implemented.');
+}
