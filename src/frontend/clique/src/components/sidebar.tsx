@@ -18,6 +18,7 @@ export default function SideBar() {
   const [photoModalOpen, setPhotoModalOpen] = useState(false);
   const [postModalOpen, setPostModalOpen] = useState(false);
 
+  //open/close both upload and post modal
   const handleOnShare = () => {
     setPhotoModalOpen(false)
     setPostModalOpen(false)

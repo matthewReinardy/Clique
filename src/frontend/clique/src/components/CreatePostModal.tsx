@@ -29,7 +29,8 @@ export interface CreatePostDialogProps {
             <ArrowBackIcon/>
             </IconButton>
             <Typography>Create New Post</Typography>
-            <Button onClick={onShare}>Share</Button>
+            {/* closes both upload and post modals -- TODO: post to database */}
+            <Button onClick={onShare}>Share</Button> 
           </Box>
           <Divider/>
           </DialogTitle>
@@ -46,6 +47,8 @@ export interface CreatePostDialogProps {
                 <AccountCircleIcon/>
                 <Typography>{loggedInUser?.username}</Typography>
               </Box>
+
+              {/* caption textbox */}
               <TextField
                 id="outlined-multiline-static"
                 multiline
@@ -54,10 +57,14 @@ export interface CreatePostDialogProps {
                 sx={{marginTop: 2}}
               />
               <Divider sx={{marginTop: 2}}/>
+
+              {/* open location textbox */}
               <Button onClick={() => setShowLocationTextbox(true)}>Add location</Button>
               {showLocationTextbox && (
                 <TextField />
               )}
+
+              {/* open tags textbox */}
               <Button onClick={() => setShowTagsTextbox(true)}>Add tags</Button>
               {showTagsTextbox && (
                 <TextField />
