@@ -26,8 +26,9 @@ public class UserController {
 
     // Find the user by the ID
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable Long id) {
-        return userRepo.findById(id);
+    public Optional<User> getUserById(@PathVariable String id) {
+        Long userId = Long.parseLong(id);
+        return userRepo.findById(userId);
     }
 
     // Creating a new user
@@ -80,8 +81,9 @@ public class UserController {
 
     //Deleting a user
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        Optional<User> userOptional = userRepo.findById(id);
+    public ResponseEntity<String> deleteUser(@PathVariable String id) {
+        Long userId = Long.parseLong(id);
+        Optional<User> userOptional = userRepo.findById(userId);
 
         if (userOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");

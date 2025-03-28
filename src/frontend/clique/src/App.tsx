@@ -10,7 +10,6 @@ export default function App() {
     <UserProvider>
       <Container>      
         <UserList/>
-        <SideBar/>  
       </Container>
     </UserProvider>
     </>
