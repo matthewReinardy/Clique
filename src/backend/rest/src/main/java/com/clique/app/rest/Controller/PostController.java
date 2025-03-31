@@ -6,6 +6,7 @@ import com.clique.app.rest.Repo.PostRepo;
 import com.clique.app.rest.Repo.UserRepo;
 import com.clique.app.rest.Service.FileStorageSystem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +34,12 @@ public class PostController {
         return postRepo.findAll();
     }
 
+    /* FOR TESTING THE BASE 64 IMG
+
+    https://base64.guru/converter/decode/image
+
+    */
+
     // Get a single post by ID
     @GetMapping("/{id}")
     public Optional<Post> getPostById(@PathVariable Long id) {
@@ -41,52 +48,90 @@ public class PostController {
 
     // Create a new post (Fix the mapping here)
     @PostMapping("/save")
-    public String createPost(
+    public ResponseEntity<?> createPost(
+            // Takes in 3 params, file + caption + who made the post
             @RequestParam("file") MultipartFile file,
             @RequestParam("content") String content,
             @RequestParam("authorId") Long authorId) {
-
-        // Check if the user exists
-        User author = userRepo.findById(authorId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // Store the file and get its filename
-        String fileName;
         try {
-            fileName = fileStorageSystem.storeFile(file);
+            // Check if the user exists
+            User author = userRepo.findById(authorId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // This is when we read the image that was uploaded, and turning it into a byte array, which that is what we
+            // will store in the DB
+            byte[] imageData = file.getBytes();
+
+            Post post = new Post();
+            post.setAuthor(author);
+            post.setContent(content);
+            post.setImage(imageData);
+            post.setCreatedAt(LocalDateTime.now());
+
+            // Save the post to the DB
+            postRepo.save(post);
+            return ResponseEntity.ok().body("Post created successfully");
+
+            /* First try catch handles for the image being too large,
+                network issues, and the file format is unsupported.
+                Example return for a file being too large (JSON formatted)
+
+                {
+                    "message": "Failed to process image Java.io.IOException: File too large"
+                }
+            */
         } catch (IOException e) {
-            return "File upload failed: " + e.getMessage();
+            return ResponseEntity.status(500).body("Failed to process image " + e.getMessage());
         }
 
-        // Create and save the post
-        Post post = new Post();
-        post.setAuthor(author);
-        post.setContent(content);
-        post.setMediaFileName(fileName); // Store filename instead of full URL
-        post.setCreatedAt(LocalDateTime.now());
-
-        postRepo.save(post);
-
-        return "Post created successfully!";
+        /* This catch is for the user not existing who made the post */
+        catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 
-    // Update an existing post by ID
-   /* @PutMapping("/{id}")
-    public String updatePost(@PathVariable Long id, @RequestBody Post postDetails) {
-        Post post = postRepo.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
-        post.setContent(postDetails.getContent());
-        post.setMediaURL(postDetails.getMediaURL());
-        post.setShareCount(postDetails.getShareCount());
+   // Update a single post by its id
+    /* For now, the only thing I think we really need to be able is the caption,
+    we can allow them to swap the picture later on, here is the json for it,
 
-        postRepo.save(post);
-        return "Post updated successfully!";
-    } */
+    {
+        "content": "This is me changing the caption."
+    }
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody Post postDetails) {
+        try {
+
+            // Find the post we are trying to modify, if none, throw a 404
+            Post post = postRepo.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Post not found"));
+
+            // Update the caption, we can add changing the pic later
+            post.setContent(postDetails.getContent());
+
+            // Save the modified post to the DB
+            Post updatedPost = postRepo.save(post);
+            return ResponseEntity.ok().body(updatedPost);
+        } catch(RuntimeException e) {
+            return ResponseEntity.status(404).body("Error: " + e.getMessage());
+        }
+    }
 
     // Delete a post by ID
     @DeleteMapping("/{id}")
-    public String deletePost(@PathVariable Long id) {
-        Post post = postRepo.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
-        postRepo.delete(post);
-        return "Post deleted successfully!";
+    public ResponseEntity<String> deletePost(@PathVariable Long id) {
+        try {
+            // Find the post we are deleting
+            Post post = postRepo.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Post not found"));
+            // If post is found, delete it
+            postRepo.delete(post);
+            return ResponseEntity.ok().body("Post deleted successfully");
+        } catch(RuntimeException e) {
+            // If not return a 404
+            return ResponseEntity.status(404).body("Error: " + e.getMessage());
+        }
+
+
     }
 }
