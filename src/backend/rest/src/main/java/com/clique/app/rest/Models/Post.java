@@ -34,9 +34,14 @@ public class Post {
     @Column(nullable = false, length = 500)
     private String content;
 
-    // Link to users local image
+    /* Link to users local image
     @Column(nullable = true)
-    private String mediaFileName;
+    private String mediaFileName; */
+
+    // The LONGBLOB can hold 4,294,967,295 bytes of data (4GB) so that will be the max image size for the posts
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] image;
 
     // Time post was created at
     @Column(nullable = false, updatable = false)
