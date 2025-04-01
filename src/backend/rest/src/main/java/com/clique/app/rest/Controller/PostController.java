@@ -51,7 +51,9 @@ public class PostController {
     public ResponseEntity<?> createPost(
             // Takes in 3 params, file + caption + who made the post
             @RequestParam("file") MultipartFile file,
-            @RequestParam("content") String content,
+            @RequestParam("caption") String caption,
+            @RequestParam("location") String location,
+            @RequestParam(value = "tags", required = false) List<String> tags,
             @RequestParam("authorId") Long authorId) {
         try {
             // Check if the user exists
@@ -64,7 +66,11 @@ public class PostController {
 
             Post post = new Post();
             post.setAuthor(author);
-            post.setContent(content);
+            post.setCaption(caption);
+            post.setLocation(location);
+            if (tags != null) {
+                post.setTags(tags);
+            }
             post.setImage(imageData);
             post.setCreatedAt(LocalDateTime.now());
 
@@ -106,8 +112,19 @@ public class PostController {
             Post post = postRepo.findById(id)
                     .orElseThrow(() -> new RuntimeException("Post not found"));
 
-            // Update the caption, we can add changing the pic later
-            post.setContent(postDetails.getContent());
+            // Update the post details
+            if (postDetails.getCaption() != null) {
+                post.setCaption(postDetails.getCaption());
+            }
+
+            if (postDetails.getLocation() != null) {
+                post.setLocation(postDetails.getLocation());
+            }
+
+            if (postDetails.getTags() != null) {
+                post.setTags(postDetails.getTags());
+            }
+
 
             // Save the modified post to the DB
             Post updatedPost = postRepo.save(post);
