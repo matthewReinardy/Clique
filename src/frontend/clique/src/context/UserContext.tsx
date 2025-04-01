@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useState, useEffect} from 'react'
 import { User, UserCreationRequest, UserId } from '../types/userTypes'
-import { fetchUsers, createUser, updateUser, deleteUser } from '../api/userApi'
+import { getUsers, createUser, updateUser, deleteUser, getUserById } from '../api/userApi'
 
 //Context Type
 interface UserContextType {
@@ -8,6 +8,7 @@ interface UserContextType {
     loading: boolean,
     error: string | null,
     fetchAllUsers: () => Promise<void>,
+    fetchUserById: (userId: UserId) => Promise<User | null>,
     addUser: (user: UserCreationRequest) => Promise<void>,
     editUser: (userId: UserId, user: Partial<UserCreationRequest>) => Promise<void>,
     removeUser: (userId: UserId) => Promise<void>,
@@ -19,6 +20,7 @@ const defaultContext: UserContextType = {
     loading: false,
     error: null,
     fetchAllUsers: async () => {},
+    fetchUserById: async () => Promise.resolve(null),
     addUser: async () => {},
     editUser: async () => {},
     removeUser: async () => {},
@@ -40,7 +42,7 @@ export function UserProvider({children} : {children: React.ReactNode}) { //Type 
         setError(null)
 
         try {
-            const response = await fetchUsers()
+            const response = await getUsers()
             setUsers(response.data)
         } catch {
             setError('Error fetching users.')
@@ -48,6 +50,22 @@ export function UserProvider({children} : {children: React.ReactNode}) { //Type 
             setLoading(false)
         }
     }
+
+    //FETCH user by ID:
+    const fetchUserById = async (userId: UserId): Promise<User | null> => {
+        setLoading(true);
+        setError(null);
+    
+        try {
+            const response = await getUserById(userId);
+            return response.data; //Return the fetched user
+        } catch {
+            setError('Error fetching user by ID');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
 
     //ADD user:
     const addUser = async (user: UserCreationRequest) => {
@@ -101,7 +119,7 @@ export function UserProvider({children} : {children: React.ReactNode}) { //Type 
     return (
         
         //All child components consuming this context will have access to the data in this provider
-        <UserContext.Provider value={{users, loading, error, fetchAllUsers, addUser, editUser, removeUser}}>
+        <UserContext.Provider value={{users, loading, error, fetchAllUsers, fetchUserById, addUser, editUser, removeUser}}>
             {children} 
         </UserContext.Provider>
     )

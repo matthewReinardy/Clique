@@ -32,20 +32,25 @@ export interface User {
     posts: Array<PostId>, 
     comments: Array<CommentId>
     userLike: Array<LikeId>
-    website: string,
-    //role: 'USER' | 'BUSINESS' | 'ADMIN', //Not included in the DB User table as of 3/18/25
 }
 
 export interface UserCreationRequest {
     firstName: string,
     lastName: string,
     username: string,
+    email: string,
     password: string,
     phoneNumber: string,
-    email: string,
+    dateOfBirth: string,
     bio: string,
-    website: string,
-    // profilePicture: string //Not supported as of 3/18/25
+    location: string,
+    isPrivate: boolean,
+    isVerified: boolean,
+    profilePicture: string,
+    accountType: string,
+    followerCount: number,
+    followingCount: number,
+    postCount: number,
 }
 
 export const defaultUser: User = {
@@ -53,7 +58,16 @@ export const defaultUser: User = {
     lastName: "",
     username: "",
     email: "",
+    password: "",
     phoneNumber: "",
-    website: "",
+    dateOfBirth: "",
     bio: "",
+    location: "",
+    isPrivate: false,
+    isVerified: false,
+    profilePicture: "",
+    accountType: "user",
+    followerCount: 0,
+    followingCount: 0,
+    postCount: 0,
 }
