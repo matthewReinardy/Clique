@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Collections;
+import java.util.Map;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,10 +35,11 @@ public class UserController {
 
     // Creating a new user
     @PostMapping(value = "/save")
-    public String saveUser(@RequestBody User user) {
-        userRepo.save(user);
-        return "Saved...";
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
+        User savedUser = userRepo.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
+    
 
     // Updating a user
     @PutMapping(value = "update/{id}")
@@ -54,20 +57,20 @@ public class UserController {
             updatedUser.setFirstName(user.getFirstName());
             updatedUser.setLastName(user.getLastName());
             updatedUser.setPhoneNumber(user.getPhoneNumber());
-            // updatedUser.setDateOfBirth(user.getDateOfBirth());
+            updatedUser.setDateOfBirth(user.getDateOfBirth());
             updatedUser.setBio(user.getBio());
-            // updatedUser.setLocation(user.getLocation());
+            updatedUser.setLocation(user.getLocation());
             updatedUser.setUsername(user.getUsername());
             updatedUser.setEmail(user.getEmail());
-            // updatedUser.setPassword(user.getPassword());
-            // updatedUser.setIsPrivate(user.getIsPrivate());
-            // updatedUser.setIsVerified(user.getIsVerified());
-            // updatedUser.setProfilePicture(user.getProfilePicture());
-            // updatedUser.setAccountType(user.getAccountType());
+            updatedUser.setPassword(user.getPassword());
+            updatedUser.setIsPrivate(user.getIsPrivate());
+            updatedUser.setIsVerified(user.getIsVerified());
+            updatedUser.setProfilePicture(user.getProfilePicture());
+            updatedUser.setAccountType(user.getAccountType());
             // updatedUser.setInterests(user.getInterests());
-            // updatedUser.setFollowerCount(user.getFollowerCount());
-            // updatedUser.setFollowingCount(user.getFollowingCount());
-            // updatedUser.setPostCount(user.getPostCount());
+            updatedUser.setFollowerCount(user.getFollowerCount());
+            updatedUser.setFollowingCount(user.getFollowingCount());
+            updatedUser.setPostCount(user.getPostCount());
 
             // Save the updated user to the database
             userRepo.save(updatedUser);
@@ -81,20 +84,23 @@ public class UserController {
 
     //Deleting a user
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable String id) {
+    public ResponseEntity<Map<String, String>> deleteUser(@PathVariable String id) {
         Long userId = Long.parseLong(id);
         Optional<User> userOptional = userRepo.findById(userId);
 
         if (userOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", "User not found"));
         }
 
         try {
             userRepo.delete(userOptional.get());
-            return ResponseEntity.ok("User deleted successfully!");
+            return ResponseEntity.ok(Collections.singletonMap("message", "User deleted successfully!"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message", "Failed to delete user"));
         }
     }
+
 }
 

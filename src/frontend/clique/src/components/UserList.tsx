@@ -1,16 +1,19 @@
 import { useUserContext } from '../context/UserContext'
 import { useState } from 'react'
-import { Button, Typography, List, ListItem, ListItemText, ListItemAvatar, Avatar, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material'
+import { Button, Typography, List, ListItem, ListItemText, ListItemAvatar, Avatar, IconButton, Dialog, DialogContent, DialogTitle } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { User, defaultUser } from '../types/userTypes' 
-import { updateUser } from '../api/userApi'
+import { createUser, updateUser } from '../api/userApi'
+import CreateUserForm from './forms/CreateUser'
 
 export default function UserList() {
 
     const {users, loading, error, removeUser} = useUserContext()
-    const [open, setOpen] = useState(false)
+    const [updateOpen, setUpdateOpen] = useState(false)
+    const [createOpen, setCreateOpen] = useState(false)
     const [selectedUser, setSelectedUser] = useState<User | null>(null)
+    const [newUser, setNewUser] = useState<User>(defaultUser)
 
     if (loading) {
         return <Typography>Loading...</Typography>
@@ -28,7 +31,7 @@ export default function UserList() {
     }
 
     //Handle updating field inputs
-    const handleChange = async (field: keyof User, value: string) => {
+    const handleUpdateChange = (field: keyof User, value: string) => {
 
         if (selectedUser && selectedUser[field] === value) return //Prevents unnecessary updates
 
@@ -46,14 +49,8 @@ export default function UserList() {
         })
     }
 
-    //Close the dialog
-    const handleClose = () => {
-        setSelectedUser(null)
-        setOpen(false)
-    }
-
-    //Handle form submission - saving the updated user
-    const handleSubmit = async (user: User) => {
+    //Handle UPDATE form submission - saving the updated user
+    const handleUpdateSubmit = async () => {
         
         if (!selectedUser) {
             console.error("selected user is null, cannot update.")
@@ -68,22 +65,62 @@ export default function UserList() {
                 lastName: userToUpdate.lastName,
                 username: userToUpdate.username,
                 email: userToUpdate.email,
+                password: userToUpdate.password,
                 phoneNumber: userToUpdate.phoneNumber,
-                // website: userToUpdate.website,
+                dateOfBirth: userToUpdate.dateOfBirth,
                 bio: userToUpdate.bio,
-                location: userToUpdate.location
+                location: userToUpdate.location,
+                isPrivate: false,
+                isVerified: false,
+                profilePicture: "",
+                accountType: userToUpdate.accountType,
+                followerCount: 0,
+                followingCount: 0,
+                postCount: 0,
             })
 
-            setOpen(false)
-            alert(`The user with the id of ${user.id} (${user.username}) has been successfully updated!}`)
+            alert(`The user with the id of ${userToUpdate.id} (${userToUpdate.username}) has been successfully updated!}`)
         } catch (error) {
             console.error("Error updating user:", error) 
         }
         
     }
+    
+    //Handle creating new user 
+    const handleCreateChange = (field: keyof User, value: string) => {
+
+        setNewUser(prevNewUser => {
+            return {...prevNewUser, [field]: value}
+        })
+    }
+
+    const handleCreateSubmit = async () => {
+
+        try {
+            await createUser(newUser)
+            setCreateOpen(false)
+            alert(`The new user ${newUser.username} has been created successfully!`)
+        } catch (error) {
+            console.error("Error creating user:", error)
+        }
+    }
+
+    //Close the dialog
+    const handleClose = () => {
+        setSelectedUser(null)
+        setUpdateOpen(false)
+        setCreateOpen(false)
+    }
 
     return (
         <div>
+            
+            <Button variant='contained'
+                    onClick={() => setCreateOpen(true)}
+            >
+                Create New User
+            </Button>
+
             <List>
                 {users.map((user) => (
                     <ListItem key={user.id}>
@@ -91,14 +128,22 @@ export default function UserList() {
                             <Avatar alt={`${user.username}'s profile picture`} />
                         </ListItemAvatar>
                         <ListItemText 
-                            primary={user.username}
+                            primary={<Typography style={{fontWeight: 'bold'}}>{user.username}</Typography>}
                             secondary={
                                 <Typography variant="body2" component="span" style={{ whiteSpace: 'pre-line' }}>
-                                    {`${user.firstName} ${user.lastName}`}
-                                    {'\n'}{user.phoneNumber}
-                                    {'\n'}{user.email}
-                                    {'\n'}{user.bio}
-                                    {'\n'}{user.location}
+                                    {`Name: ${user.firstName} ${user.lastName}`}
+                                    {'\nAccount Type: '}{user.accountType}
+                                    {'\nEmail: '}{user.email}
+                                    {'\nPhone Number: '}{user.phoneNumber}
+                                    {'\nPassword: '}{user.password}
+                                    {'\nDOB: '}{user.dateOfBirth}
+                                    {'\nLocation: '}{user.location}
+                                    {'\nBio: '}{user.bio}
+                                    {'\nFollower Count: '}{user.followerCount}
+                                    {'\nFollowing Count: '}{user.followingCount}
+                                    {'\nPost Count: '}{user.postCount}
+                                    {'\nPrivate: '}{user.isPrivate.toString()}
+                                    {'\nVerified: '}{user.isVerified.toString()}
                                 </Typography>
                             }
                         />
@@ -107,88 +152,37 @@ export default function UserList() {
                         </IconButton>
                         <IconButton edge="end" onClick={() => {
                                 setSelectedUser(user)
-                                setOpen(true) }}>
+                                setUpdateOpen(true) }}>
                             <EditIcon />
                         </IconButton>
                     </ListItem>
                 ))}
             </List>
 
-            <Dialog 
-                open={open} 
-                onClose={handleClose}
-                aria-labelledby='edit-user-dialog'
-                disableEnforceFocus
-                disableRestoreFocus
-            >
-                <DialogTitle id='edit-user-dialog'>Edit User Information</DialogTitle>
+            {/* Create New User */}
+            <Dialog open={createOpen} onClose={handleClose} aria-labelledby='create-user-dialog'>
+                <DialogTitle id="create-user-dialog">Create New User</DialogTitle>
                 <DialogContent>
-                    <TextField
-                        label="First name"
-                        value={selectedUser?.firstName || ""}
-                        onChange={(e) => handleChange('firstName', e.target.value)}
-                        fullWidth
-                        margin="normal"
-                        autoFocus
-                    />
-                    <TextField
-                        label="Last name"
-                        value={selectedUser?.lastName || ""}
-                        onChange={(e) => handleChange('lastName', e.target.value)}
-                        fullWidth
-                        margin="normal"
-                    />
-                    <TextField
-                        label="Username"
-                        value={selectedUser?.username || ""}
-                        onChange={(e) => handleChange('username', e.target.value)}
-                        fullWidth
-                        margin="normal"
-                    />
-                    <TextField
-                        label="Phone Number"
-                        value={selectedUser?.phoneNumber || ""}
-                        onChange={(e) => handleChange('phoneNumber', e.target.value)}
-                        fullWidth
-                        margin="normal"
-                    />
-                    <TextField
-                        label="Email"
-                        value={selectedUser?.email || ""}
-                        onChange={(e) => handleChange('email', e.target.value)}
-                        fullWidth
-                        margin="normal"
-                    />
-                    {/* <TextField
-                        label="Website Link"
-                        value={selectedUser?.website || ""}
-                        onChange={(e) => handleChange('website', e.target.value)}
-                        fullWidth
-                        margin="normal"
-                    /> */}
-                    <TextField
-                        label="Location"
-                        value={selectedUser?.location || ""}
-                        onChange={(e) => handleChange('location', e.target.value)}
-                        fullWidth
-                        margin="normal"
-                    />
-                    <TextField
-                        label="Bio"
-                        value={selectedUser?.bio || ""}
-                        onChange={(e) => handleChange('bio', e.target.value)}
-                        fullWidth
-                        margin="normal"
+                    <CreateUserForm
+                        user={newUser}
+                        onChange={handleCreateChange}
+                        onSubmit={handleCreateSubmit}
+                        isNewUser={true} //New user flag
                     />
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose || ""}>
-                        Cancel
-                    </Button>
-                    <Button onClick={() => handleSubmit(selectedUser!) /*selectedUser! will never be null/undefined */}> 
-                        Save
-                    </Button>
-                </DialogActions>
+            </Dialog>
+
+            {/* Update User */}
+            <Dialog open={updateOpen} onClose={handleClose} aria-labelledby='edit-user-dialog'>
+                <DialogTitle id="edit-user-dialog">Edit User</DialogTitle>
+                <DialogContent>
+                    <CreateUserForm
+                        user={selectedUser ?? defaultUser} //If selected user is null, defaultUser is the fallback user
+                        onChange={handleUpdateChange}
+                        onSubmit={handleUpdateSubmit}
+                        isNewUser={false} //Update, not new user
+                    />
+                </DialogContent>
             </Dialog>
         </div>
     )
