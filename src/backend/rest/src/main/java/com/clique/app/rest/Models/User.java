@@ -38,12 +38,16 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] pfpImage;
+
     @Column
     private String phoneNumber;
 
     // PFP,
     @Column
-    private LocalDate dateOfBirth;
+    private String dateOfBirth;
 
     @Column
     private String bio;
@@ -56,9 +60,6 @@ public class User {
 
     @Column
     private Boolean isVerified;
-
-    @Column
-    private String profilePicture;
 
     @Column
     private String accountType;
