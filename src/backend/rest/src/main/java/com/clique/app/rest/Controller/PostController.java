@@ -46,10 +46,10 @@ public class PostController {
         return postRepo.findById(id);
     }
 
-    // Create a new post (Fix the mapping here)
+    // Create a new post
     @PostMapping("/save")
     public ResponseEntity<?> createPost(
-            // Takes in 3 params, file + caption + who made the post
+            // Takes in 5 params
             @RequestParam("file") MultipartFile file,
             @RequestParam("caption") String caption,
             @RequestParam("location") String location,
@@ -96,14 +96,8 @@ public class PostController {
         }
     }
 
-   // Update a single post by its id
-    /* For now, the only thing I think we really need to be able is the caption,
-    we can allow them to swap the picture later on, here is the json for it,
 
-    {
-        "content": "This is me changing the caption."
-    }
-     */
+    // Update a post by its ID
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody Post postDetails) {
         try {
@@ -112,15 +106,17 @@ public class PostController {
             Post post = postRepo.findById(id)
                     .orElseThrow(() -> new RuntimeException("Post not found"));
 
-            // Update the post details
+            // Update the post caption
             if (postDetails.getCaption() != null) {
                 post.setCaption(postDetails.getCaption());
             }
 
+            // Update the location
             if (postDetails.getLocation() != null) {
                 post.setLocation(postDetails.getLocation());
             }
 
+            // Upadte the tags
             if (postDetails.getTags() != null) {
                 post.setTags(postDetails.getTags());
             }
