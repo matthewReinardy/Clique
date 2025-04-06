@@ -2,7 +2,7 @@ import { makeRequest } from "./apiService"
 import { ApiResponse, User, UserId, UserCreationRequest } from "../types/userTypes"
 
 //GET a list of all users:
-export const fetchUsers = (): Promise<ApiResponse<User[]>> => {
+export const getUsers = (): Promise<ApiResponse<User[]>> => {
     return makeRequest<User[]>('users', 'GET')
 }
 

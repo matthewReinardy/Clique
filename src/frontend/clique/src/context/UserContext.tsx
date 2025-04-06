@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useState, useEffect} from 'react'
 import { User, UserCreationRequest, UserId } from '../types/userTypes'
-import { fetchUsers, createUser, updateUser, deleteUser, getUserById } from '../api/userApi'
+import { getUsers, createUser, updateUser, deleteUser, getUserById } from '../api/userApi'
 
 //Context Type
 interface UserContextType {
@@ -8,6 +8,7 @@ interface UserContextType {
     loading: boolean,
     error: string | null,
     fetchAllUsers: () => Promise<void>,
+    fetchUserById: (userId: UserId) => Promise<User | null>,
     fetchUserById: (userId: UserId) => Promise<User | null>,
     addUser: (user: UserCreationRequest) => Promise<void>,
     editUser: (userId: UserId, user: Partial<UserCreationRequest>) => Promise<void>,
@@ -20,6 +21,7 @@ const defaultContext: UserContextType = {
     loading: false,
     error: null,
     fetchAllUsers: async () => {},
+    fetchUserById: async () => Promise.resolve(null),
     fetchUserById: async () => Promise.resolve(null),
     addUser: async () => {},
     editUser: async () => {},
@@ -42,7 +44,7 @@ export function UserProvider({children} : {children: React.ReactNode}) { //Type 
         setError(null)
 
         try {
-            const response = await fetchUsers()
+            const response = await getUsers()
             setUsers(response.data)
         } catch {
             setError('Error fetching users.')
@@ -58,7 +60,7 @@ export function UserProvider({children} : {children: React.ReactNode}) { //Type 
     
         try {
             const response = await getUserById(userId);
-            return response.data; // Return the fetched user
+            return response.data; //Return the fetched user
         } catch {
             setError('Error fetching user by ID');
             return null;

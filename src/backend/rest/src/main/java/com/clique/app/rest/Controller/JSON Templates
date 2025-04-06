@@ -49,3 +49,13 @@ Comment Template
     },
     "content": ""
 }
+
+Ad Template
+{
+  "display": true,
+  "isApproved": true,
+  "mediaUrl": "",
+  "user": {
+    "id":
+  }
+}
