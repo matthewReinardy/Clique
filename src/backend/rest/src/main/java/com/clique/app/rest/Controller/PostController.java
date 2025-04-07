@@ -53,7 +53,7 @@ public class PostController {
             @RequestParam("file") MultipartFile file,
             @RequestParam("caption") String caption,
             @RequestParam("location") String location,
-            @RequestParam(value = "tags", required = false) List<String> tags,
+            @RequestParam(value = "tags", required = false) String tags,
             @RequestParam("authorId") Long authorId) {
         try {
             // Check if the user exists
@@ -68,9 +68,7 @@ public class PostController {
             post.setAuthor(author);
             post.setCaption(caption);
             post.setLocation(location);
-            if (tags != null) {
-                post.setTags(tags);
-            }
+            post.setTags(tags);
             post.setImage(imageData);
             post.setCreatedAt(LocalDateTime.now());
 

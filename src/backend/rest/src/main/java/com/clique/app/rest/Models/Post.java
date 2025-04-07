@@ -31,18 +31,16 @@ public class Post {
     @JsonIgnoreProperties("posts")
     private User author;
 
-    @Column(nullable = false, length = 500)
+    @Column
     private String caption;
 
     // Location of the post
-    @Column(length = 100)
+    @Column
     private String location;
 
     // Tags for the post
-    @ElementCollection
-    @CollectionTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"))
-    @Column(name = "tag")
-    private List<String> tags = new ArrayList<>();
+    @Column
+    private String tags;
 
 
     // The LONGBLOB can hold 4,294,967,295 bytes of data (4GB) so that will be the max image size for the posts
@@ -65,7 +63,7 @@ public class Post {
     @JsonIgnoreProperties("post")
     private List<UserLike> likes;
 
-    @Column(nullable = false)
+    @Column
     private Integer shareCount = 0;
 
     // Dynamically calculates and returns the like count for this specific Post
