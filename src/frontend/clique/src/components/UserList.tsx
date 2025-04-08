@@ -131,7 +131,8 @@ export default function UserList() {
                             primary={<Typography style={{fontWeight: 'bold'}}>{user.username}</Typography>}
                             secondary={
                                 <Typography variant="body2" component="span" style={{ whiteSpace: 'pre-line' }}>
-                                    {`Name: ${user.firstName} ${user.lastName}`}
+                                    {'ID: '}{user.id}
+                                    {`\nName: ${user.firstName} ${user.lastName}`}
                                     {'\nAccount Type: '}{user.accountType}
                                     {'\nEmail: '}{user.email}
                                     {'\nPhone Number: '}{user.phoneNumber}

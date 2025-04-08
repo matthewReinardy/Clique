@@ -45,13 +45,6 @@ export default function CreateUserForm({
                 margin="normal"
             />
             <TextField
-                label="Account Type"
-                value={user.accountType || ""}
-                onChange={(e) => onChange('accountType', e.target.value)}
-                fullWidth
-                margin="normal"
-            />
-            <TextField
                 label="Email"
                 value={user.email || ""}
                 onChange={(e) => onChange('email', e.target.value)}
