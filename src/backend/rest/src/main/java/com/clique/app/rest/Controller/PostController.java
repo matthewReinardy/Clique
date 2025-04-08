@@ -54,6 +54,7 @@ public class PostController {
             @RequestParam("caption") String caption,
             @RequestParam("location") String location,
             @RequestParam(value = "tags", required = false) List<String> tags,
+            @RequestParam("tag") String tag,
             @RequestParam("authorId") Long authorId) {
         try {
             // Check if the user exists

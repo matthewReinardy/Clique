@@ -9,6 +9,9 @@ import { useUserContext } from '../context/UserContext';
 import { loggedInUserId } from '../types/loggedInUser';
 import { User, UserId } from '../types/userTypes';
 import { getUserById } from '../api/userApi';
+import { PostCreationRequest } from '../types/postTypes';
+import { userPostContext } from '../context/PostContext';
+import { create } from '@mui/material/styles/createTransitions';
 
 export interface CreatePostDialogProps {
     open: boolean;
@@ -17,9 +20,12 @@ export interface CreatePostDialogProps {
   }
 
   const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ open, onClose, onShare }) => {
+    const { handleCreatePost } = userPostContext();
     const {fetchUserById} = useUserContext();
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-    const [content, setContent] = useState<string>('');
+    const [caption, setCaption] = useState<string>('');
+    const [tag, setTag] = useState<string>('');
+    const [location, setLocation] = useState<string>('');
     const [showLocationTextbox, setShowLocationTextbox] = useState(false)
     const [showTagsTextbox, setShowTagsTextbox] = useState(false)
 
@@ -39,6 +45,35 @@ export interface CreatePostDialogProps {
       }
   }, [open]);
 
+  //save post to database when Share button is clicked
+  const handleSharePost = async () => {
+    if (!loggedInUser) return;
+
+    const newPost: PostCreationRequest = {
+      caption,
+      tag,
+      location,
+      mediaFileName: '', //TODO: change later
+      authorId: loggedInUser.id
+    };
+
+    console.log('Attempting to create post with: ', newPost);
+
+    try {
+      const createdPost = await handleCreatePost(newPost);
+
+      if (!createdPost) {
+       console.error('Post creation returned undefined');
+      }
+
+      console.log('Post created successfully: ', createdPost);
+
+      onClose(); //close modal after success
+    } catch (error) {
+      console.error('Exception thrown during post creation:', error);
+    }
+  };
+
     return (
       <Dialog fullWidth onClose={onClose} open={open}>
         <DialogTitle>
@@ -47,8 +82,8 @@ export interface CreatePostDialogProps {
             <ArrowBackIcon/>
             </IconButton>
             <Typography>Create New Post</Typography>
-            {/* closes both upload and post modals -- TODO: post to database */}
-            <Button onClick={onShare}>Share</Button> 
+            {/* posts to database */}
+            <Button onClick={handleSharePost}>Share</Button> 
           </Box>
           <Divider/>
           </DialogTitle>
@@ -71,7 +106,8 @@ export interface CreatePostDialogProps {
                 id="outlined-multiline-static"
                 multiline
                 rows={4}
-                defaultValue="Enter a caption..."
+                placeholder="Enter a caption..."
+                onChange={(e) => setCaption(e.target.value)}
                 sx={{marginTop: 2}}
               />
               <Divider sx={{marginTop: 2}}/>
@@ -79,13 +115,18 @@ export interface CreatePostDialogProps {
               {/* open location textbox */}
               <Button onClick={() => setShowLocationTextbox(true)}>Add location</Button>
               {showLocationTextbox && (
-                <TextField />
+                <TextField 
+                placeholder="Enter location..."
+                onChange={(e) => setLocation(e.target.value)}
+                />
               )}
 
               {/* open tags textbox */}
               <Button onClick={() => setShowTagsTextbox(true)}>Add tags</Button>
               {showTagsTextbox && (
-                <TextField />
+                <TextField 
+                placeholder="Enter tags..."
+                onChange={(e) => setTag(e.target.value)}/>
               )}
               <Divider/>
             </Grid>

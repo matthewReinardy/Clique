@@ -22,7 +22,6 @@ const defaultContext: UserContextType = {
     error: null,
     fetchAllUsers: async () => {},
     fetchUserById: async () => Promise.resolve(null),
-    fetchUserById: async () => Promise.resolve(null),
     addUser: async () => {},
     editUser: async () => {},
     removeUser: async () => {},

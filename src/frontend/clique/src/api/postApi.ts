@@ -8,9 +8,10 @@ import { ApiResponse, Post, PostCreationRequest } from "../types/postTypes";
 //CREATE: new post
 export const createPost = (
     postData: PostCreationRequest
-  ): Promise<ApiResponse<Post>> => {
-    return makeRequest<Post>('posts/save', 'POST', postData);
-  };
+): Promise<ApiResponse<Post>> => {
+  console.log('Sending POST data to API: ', postData);
+  return makeRequest<Post>('posts/save', 'POST', postData);
+};
 
 //UPDATE: exisitng post
 

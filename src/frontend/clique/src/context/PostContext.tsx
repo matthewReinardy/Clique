@@ -30,17 +30,60 @@ export function PostProvider({ children }: { children: React.ReactNode }) {
     //FETCH post by ID:
 
     //CREATE post:
-    const handleCreatePost = async (postData: PostCreationRequest) => {
-        setLoading(true);
-        setError(null);
+    const handleCreatePost = async (postData: PostCreationRequest, image: File): Promise<String> => {
+        const formData = new FormData();
+        
+        formData.append('image', File);
+        formData.append('caption', postData.caption);
+        formData.append('tag', postData.tag);
+        formData.append('location', postData.location);
+        formData.append('authorId', postData.authorId.toString());
+
         try {
-            const response = await createPostApi(postData);
-            return response.data;
-        } catch {
+            console.log('Creating post with data: ', postData);
+            setLoading(true);
+            setError(null);
+
+            const response = await fetch('http://localhost:8080/posts/save', {
+                method: 'POST',
+                body: formData,
+              });
+
+              //convert from JSON to string
+              const result = await response.text();
+            return result;
+        } catch (error) {
+            console.error('Error in handleCreatePost in PostContext: ', error);
             setError('Error creating post.');
+            return undefined;
+
         } finally {
             setLoading(false);
         }
+
+        // console.log('Creating post with data: ', postData);
+        // setLoading(true);
+        // setError(null);
+
+        // try {
+        //     const response = await createPostApi(postData);
+
+        //     if (!response || !response.data) {
+        //         console.error('Invalid response from createPostApi: ', response);
+        //         return undefined;
+        //     }
+
+        //     console.log('Post created successfully: ', response.data);
+        //     return response.data;
+
+        // } catch (error) {
+        //     console.error('Error in handleCreatePost in PostContext: ', error);
+        //     setError('Error creating post.');
+        //     return undefined;
+
+        // } finally {
+        //     setLoading(false);
+        // }
     };
 
     //EDIT post:

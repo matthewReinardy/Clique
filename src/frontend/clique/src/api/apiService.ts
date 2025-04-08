@@ -42,12 +42,16 @@ export async function makeRequest<T, B = unknown>(
     try {
 
         const response = await fetch(`${API_BASE_URL}/${endpoint}`, options)
+        console.log(`Response status from ${endpoint}: `, response.status);
 
         if (!response.ok) {
+            const errorMsg = await response.text();
+            console.log(`Error response from ${endpoint}: `, errorMsg);
             throw new Error(`HTTP error! Status: ${response.status}`)
         }
 
         const data: T = await response.json()
+        console.log(`Parsed response data from ${endpoint}: `, data);
         return {data}
     } catch (error: unknown) {
         if (error instanceof Error) {
