@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,13 +31,22 @@ public class Post {
     @JsonIgnoreProperties("posts")
     private User author;
 
-    // Caption of a post, setting a limit
-    @Column(nullable = false, length = 500)
-    private String content;
+    @Column
+    private String caption;
 
-    // Link to users local image
-    @Column(nullable = true)
-    private String mediaFileName;
+    // Location of the post
+    @Column
+    private String location;
+
+    // Tags for the post
+    @Column
+    private String tags;
+
+
+    // The LONGBLOB can hold 4,294,967,295 bytes of data (4GB) so that will be the max image size for the posts
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] image;
 
     // Time post was created at
     @Column(nullable = false, updatable = false)
@@ -53,7 +63,7 @@ public class Post {
     @JsonIgnoreProperties("post")
     private List<UserLike> likes;
 
-    @Column(nullable = false)
+    @Column
     private Integer shareCount = 0;
 
     // Dynamically calculates and returns the like count for this specific Post
