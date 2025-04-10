@@ -54,9 +54,9 @@ export interface UserCreationRequest {
 }
 
 export const defaultUser: User = {
-    firstName: "John",
-    lastName: "Doe",
-    username: "DefaultUser",
+    firstName: "",
+    lastName: "",
+    username: "",
     email: "",
     password: "",
     phoneNumber: "",
