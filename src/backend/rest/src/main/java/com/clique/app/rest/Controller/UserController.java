@@ -78,10 +78,6 @@ public class UserController {
             user.setFollowingCount(0);
             user.setPostCount(0);
 
-            // Set default values for flags
-            user.setActive(true);
-            user.setSuspended(false);
-
             // Process profile picture if provided
             if (profilePicture != null && !profilePicture.isEmpty()) {
                 user.setPfpImage(profilePicture.getBytes());
@@ -190,4 +186,3 @@ public class UserController {
     }
 
 }
-
