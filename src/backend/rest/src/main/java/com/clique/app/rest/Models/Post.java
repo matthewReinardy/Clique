@@ -34,6 +34,9 @@ public class Post {
     @Column
     private String caption;
 
+    @Column(nullable = true)
+    private String tag;
+
     // Location of the post
     @Column
     private String location;
@@ -51,7 +54,6 @@ public class Post {
     // Time post was created at
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
 
     // One Post can have many Comments
     @OneToMany(mappedBy = "post")
