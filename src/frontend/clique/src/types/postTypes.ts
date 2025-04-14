@@ -11,7 +11,7 @@ export type PostId = number & {__brand: 'PostId'}
 export interface Post {
     id: PostId,
     caption: string,
-    tag: string;
+    tags: string;
     location: string;
     createdAt: Date,
     mediaUrl: string,
@@ -22,8 +22,7 @@ export interface Post {
 
 export interface PostCreationRequest {
     caption: string;
-    tag: string;
+    tags: string;
     location: string;
-    mediaFileName: string;
-    authorId: UserId;
+    authorId: string;
 }

@@ -47,10 +47,10 @@ public class PostController {
     }
 
     // Create a new post
-    @PostMapping("/save")
+    @PostMapping(value = "/save", consumes = "multipart/form-data")
     public ResponseEntity<?> createPost(
             // Takes in 5 params
-            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam("caption") String caption,
             @RequestParam("location") String location,
             @RequestParam(value = "tags", required = false) String tags,
@@ -62,7 +62,10 @@ public class PostController {
 
             // This is when we read the image that was uploaded, and turning it into a byte array, which that is what we
             // will store in the DB
-            byte[] imageData = file.getBytes();
+            byte[] imageData = null;
+            if (file != null && !file.isEmpty()) {
+                imageData = file.getBytes();
+            }
 
             Post post = new Post();
             post.setAuthor(author);

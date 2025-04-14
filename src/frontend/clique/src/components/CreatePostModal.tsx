@@ -9,9 +9,10 @@ import { useUserContext } from '../context/UserContext';
 import { loggedInUserId } from '../types/loggedInUser';
 import { User, UserId } from '../types/userTypes';
 import { getUserById } from '../api/userApi';
+// import { PostCreationRequest } from '../types/postTypes';
 import { PostCreationRequest } from '../types/postTypes';
-import { userPostContext } from '../context/PostContext';
-import { create } from '@mui/material/styles/createTransitions';
+import { createPost, getPostById } from '../api/postApi';
+
 
 export interface CreatePostDialogProps {
     open: boolean;
@@ -20,11 +21,10 @@ export interface CreatePostDialogProps {
   }
 
   const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ open, onClose, onShare }) => {
-    const { handleCreatePost } = userPostContext();
     const {fetchUserById} = useUserContext();
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
     const [caption, setCaption] = useState<string>('');
-    const [tag, setTag] = useState<string>('');
+    const [tags, setTags] = useState<string>('');
     const [location, setLocation] = useState<string>('');
     const [showLocationTextbox, setShowLocationTextbox] = useState(false)
     const [showTagsTextbox, setShowTagsTextbox] = useState(false)
@@ -36,7 +36,7 @@ export interface CreatePostDialogProps {
           const response = await getUserById(userId);
           setLoggedInUser(response.data);
         } catch (error) {
-          setError('Failed to fetch user');
+          throw new Error('Function not implemented.');
         }
       };
 
@@ -46,21 +46,21 @@ export interface CreatePostDialogProps {
   }, [open]);
 
   //save post to database when Share button is clicked
-  const handleSharePost = async () => {
+  const handleSubmit = async () => {
+
     if (!loggedInUser) return;
 
     const newPost: PostCreationRequest = {
       caption,
-      tag,
+      tags,
       location,
-      mediaFileName: '', //TODO: change later
-      authorId: loggedInUser.id
+      authorId: loggedInUser.id.toString()
     };
 
     console.log('Attempting to create post with: ', newPost);
 
     try {
-      const createdPost = await handleCreatePost(newPost);
+      const createdPost = await createPost(newPost);
 
       if (!createdPost) {
        console.error('Post creation returned undefined');
@@ -83,7 +83,7 @@ export interface CreatePostDialogProps {
             </IconButton>
             <Typography>Create New Post</Typography>
             {/* posts to database */}
-            <Button onClick={handleSharePost}>Share</Button> 
+            <Button onClick={handleSubmit}>Share</Button> 
           </Box>
           <Divider/>
           </DialogTitle>
@@ -126,7 +126,7 @@ export interface CreatePostDialogProps {
               {showTagsTextbox && (
                 <TextField 
                 placeholder="Enter tags..."
-                onChange={(e) => setTag(e.target.value)}/>
+                onChange={(e) => setTags(e.target.value)}/>
               )}
               <Divider/>
             </Grid>
@@ -137,7 +137,3 @@ export interface CreatePostDialogProps {
   };
   
   export default CreatePostDialog;
-
-function setError(arg0: string) {
-  throw new Error('Function not implemented.');
-}
