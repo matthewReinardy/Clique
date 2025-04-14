@@ -22,7 +22,6 @@ export default function CreateUserForm({
     const validate = (): boolean => {
         const newErrors: Record<string, string> = {}
 
-        // Check required fields and patterns
         if (!user.username) newErrors.username = "Username is required"
         if (!user.firstName) newErrors.firstName = "First name is required"
         if (!user.lastName) newErrors.lastName = "Last name is required"
@@ -43,15 +42,13 @@ export default function CreateUserForm({
             newErrors.dateOfBirth = "Date of birth must be in the format MM-DD-YYYY";
         }
         if (!user.location) newErrors.location = "Location is required"
-        if (!user.bio) newErrors.bio = "Bio is required"
 
-        // If there are errors, set them in the state and return false
+        //If there are errors, set them in the state and return false
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors)
             return false
         }
 
-        // No errors, return true
         return true
     }
 
@@ -146,8 +143,6 @@ export default function CreateUserForm({
                 onChange={(e) => onChange('bio', e.target.value)}
                 fullWidth
                 margin="normal"
-                error={Boolean(errors.bio)}
-                helperText={errors.bio}
             />
             <DialogActions>
                 <Button type="submit">
