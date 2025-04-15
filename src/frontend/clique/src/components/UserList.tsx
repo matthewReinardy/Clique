@@ -4,12 +4,11 @@ import { Button, Typography, List, ListItem, ListItemText, ListItemAvatar, Avata
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { User, defaultUser } from '../types/userTypes' 
-import { createUser, updateUser } from '../api/userApi'
 import CreateUserForm from './forms/CreateUser'
 
 export default function UserList() {
 
-    const {users, loading, error, removeUser} = useUserContext()
+    const {users, loading, error, removeUser, fetchAllUsers, editUser, addUser} = useUserContext()
     const [updateOpen, setUpdateOpen] = useState(false)
     const [createOpen, setCreateOpen] = useState(false)
     const [selectedUser, setSelectedUser] = useState<User | null>(null)
@@ -33,18 +32,15 @@ export default function UserList() {
     //Handle updating field inputs
     const handleUpdateChange = (field: keyof User, value: string) => {
 
-        if (selectedUser && selectedUser[field] === value) return //Prevents unnecessary updates
-
-        setSelectedUser(prevSelectedUser => {
-            if (!prevSelectedUser) {
-                //If prevSelectedUser is null, return early with a default user (excluding the field that's being changed)
-                return { ...defaultUser, [field]: value };
-            }
+            setSelectedUser(prevSelectedUser => {
+                if (!prevSelectedUser) {
+                    return { ...defaultUser, [field]: value };
+                }
         
-            //Update the field and preserve other properties
-            return {
-                ...prevSelectedUser,
-                [field]: value || prevSelectedUser[field], //Keep old value if empty string
+                //Always updates with the new value (including empty strings)
+                return {
+                    ...prevSelectedUser,
+                    [field]: value,
             }
         })
     }
@@ -60,7 +56,7 @@ export default function UserList() {
         const userToUpdate = selectedUser ?? defaultUser //Avoid null checks 
 
         try {
-            await updateUser(userToUpdate.id, {
+            await editUser(userToUpdate.id, {
                 firstName: userToUpdate.firstName,
                 lastName: userToUpdate.lastName,
                 username: userToUpdate.username,
@@ -78,8 +74,9 @@ export default function UserList() {
                 followingCount: 0,
                 postCount: 0,
             })
-
+            setUpdateOpen(false)
             alert(`The user with the id of ${userToUpdate.id} (${userToUpdate.username}) has been successfully updated!}`)
+            await fetchAllUsers()
         } catch (error) {
             console.error("Error updating user:", error) 
         }
@@ -97,9 +94,10 @@ export default function UserList() {
     const handleCreateSubmit = async () => {
 
         try {
-            await createUser(newUser)
+            await addUser(newUser)
             setCreateOpen(false)
             alert(`The new user ${newUser.username} has been created successfully!`)
+            await fetchAllUsers()
         } catch (error) {
             console.error("Error creating user:", error)
         }
@@ -131,7 +129,8 @@ export default function UserList() {
                             primary={<Typography style={{fontWeight: 'bold'}}>{user.username}</Typography>}
                             secondary={
                                 <Typography variant="body2" component="span" style={{ whiteSpace: 'pre-line' }}>
-                                    {`Name: ${user.firstName} ${user.lastName}`}
+                                    {'ID: '}{user.id}
+                                    {`\nName: ${user.firstName} ${user.lastName}`}
                                     {'\nAccount Type: '}{user.accountType}
                                     {'\nEmail: '}{user.email}
                                     {'\nPhone Number: '}{user.phoneNumber}
