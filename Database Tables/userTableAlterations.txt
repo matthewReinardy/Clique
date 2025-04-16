@@ -1,0 +1,2 @@
+ALTER table user
+ADD column websiteURL VARCHAR(255);

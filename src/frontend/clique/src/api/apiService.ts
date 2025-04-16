@@ -17,14 +17,13 @@ const API_BASE_URL = 'http://localhost:8080'
 * const userData = await makeRequest<User>('users/1', 'GET')
 * const newUser = await makeRequest<User>('users', 'POST', { name: 'John' })
 */
-export async function makeRequest<T, B = unknown>(
+export async function makeRequest<T, B = Record<string, string | File | undefined>>(
     endpoint: string, 
     method: 'GET' | 'POST' | 'PUT' | 'DELETE', 
     body?: B 
 ): Promise<ApiResponse<T>> { //Type unknown will require type checking before operation
 
     const headers = {
-        'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': 'http://localhost:5173',
     }
 
@@ -35,8 +34,24 @@ export async function makeRequest<T, B = unknown>(
     }
 
     //Checks if body is present for POST/PUT:
-    if (body) {
-        options.body = JSON.stringify(body) //Modifies the body property of options
+    if (body && Object.keys(body).length > 0) {
+        const formData = new FormData()
+
+        Object.keys(body).forEach((key) => {
+            const value = body[key]
+            if (value instanceof File) {
+                formData.append(key, value) //Handle file data
+            } else if (value !== undefined && value !== null) {
+                formData.append(key, value) //Handle other data fields
+            }
+        })
+
+        options.body = formData
+    } else if (method === 'POST' || method === 'PUT') {
+        // If no body is provided but it's a POST or PUT request, throw an error
+        if (body === undefined || (Object.keys(body).length === 0 && body !== null)) {
+            throw new Error('Body is required for POST/PUT requests.')
+        }
     }
 
     try {

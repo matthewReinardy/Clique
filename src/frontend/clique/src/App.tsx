@@ -2,7 +2,7 @@ import SideBar from './components/sidebar'
 import UserProfileCard from './components/UserProfileCard'
 import { Container } from "@mui/material"
 import { UserProvider } from './context/UserContext'
-import UserList from './pages/admin/view-all-users'
+import UserList from './components/UserList'
 
 export default function App() {
   return (
@@ -10,7 +10,7 @@ export default function App() {
     <UserProvider>
       <Container>      
         <UserList/>
-        <SideBar/>  
+        <SideBar/>
       </Container>
     </UserProvider>
     </>

@@ -1,0 +1,5 @@
+ALTER TABLE ad
+ADD COLUMN image longblob NOT NULL;
+
+ALTER TABLE ad
+DROP column media_url;
