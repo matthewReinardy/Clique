@@ -23,7 +23,16 @@ public class Ad {
     @Column(nullable = false)
     private boolean isApproved;
 
-    // Store image URL as String (mediaUrl)
-    @Column(nullable = false)
-    private String mediaUrl;
+    // store image as byte array for longblob column
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] image;
+
+    // ensure each ad has a reference to the user
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;  // Linking Ad to a User
+
+    public void setIsApproved(boolean isApproved) {
+    }
 }

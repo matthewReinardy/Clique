@@ -28,7 +28,7 @@ export const createUser = (
         throw new Error('User data is required to CREATE a new user. PLease enter valid user data.')
     }
     
-    return makeRequest<User>('users/save', 'POST', user)
+    return makeRequest<User, UserCreationRequest>('users/save', 'POST', user)
 }
 
 //UPDATE an existing user by ID:
@@ -46,7 +46,7 @@ export const updateUser = (
 
     //Unbrands the UserId type 
     const rawUserId: number = userId as number
-    return makeRequest<User>(`users/update/${rawUserId}`, 'PUT', user)
+    return makeRequest<User, Partial<UserCreationRequest>>(`users/update/${rawUserId}`, 'PUT', user)
 }
 
 //DELETE an existing user by ID:
