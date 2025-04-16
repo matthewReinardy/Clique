@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: #ff0000;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<h2>Register</h2>
+<form th:action="@{/register}" th:object="${user}" method="post">
+    <div>
+        <label>First Name</label>
+        <input type="text" th:field="*{firstName}" placeholder="First Name" required/>
+        <span class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First Name Error</span>
+    </div>
+    <div>
+        <label>Last Name</label>
+        <input type="text" th:field="*{lastName}" placeholder="Last Name" required/>
+        <span class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last Name Error</span>
+    </div>
+    <div>
+        <label>Username</label>
+        <input type="text" th:field="*{username}" placeholder="Username" required/>
+        <span class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</span>
+    </div>
+    <div>
+        <label>Email</label>
+        <input type="email" th:field="*{email}" placeholder="Email" required/>
+        <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</span>
+    </div>
+    <div>
+        <label>Password</label>
+        <input type="password" th:field="*{password}" placeholder="Password" required/>
+        <span class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</span>
+    </div>
+    <div>
+        <label>Phone Number</label>
+        <input type="tel" th:field="*{phoneNumber}" placeholder="Phone Number"/>
+        <span class="error" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Phone Error</span>
+    </div>
+    <div>
+        <label>Date of Birth</label>
+        <input type="date" th:field="*{dateOfBirth}"/>
+        <span class="error" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">DOB Error</span>
+    </div>
+    <button type="submit">Register</button>
+</form>
+</body>
+</html>
+
