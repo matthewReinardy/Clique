@@ -58,12 +58,15 @@ export async function makeRequest<T, B = Record<string, string | File | undefine
 
         const response = await fetch(`${API_BASE_URL}/${endpoint}`, options)
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`)
-        }
+        const contentType = response.headers.get("content-type");
 
-        const data: T = await response.json()
-        return {data}
+        if (contentType && contentType.includes("application/json")) {
+            const data: T = await response.json();
+            return { data };
+        } else {
+            const text = await response.text();
+            return { data: text as unknown as T }; // or handle appropriately
+        }
     } catch (error: unknown) {
         if (error instanceof Error) {
             console.error(`Error fetching ${endpoint}: ${error.message}`);
