@@ -12,15 +12,17 @@ import { getUserById } from '../api/userApi';
 // import { PostCreationRequest } from '../types/postTypes';
 import { PostCreationRequest } from '../types/postTypes';
 import { createPost, getPostById } from '../api/postApi';
+import { toast } from 'react-toastify';
 
 
 export interface CreatePostDialogProps {
     open: boolean;
     onClose: () => void;
+    onCloseAll: () => void;
     onShare: () => void;
   }
 
-  const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ open, onClose, onShare }) => {
+  const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ open, onClose, onCloseAll, onShare }) => {
     const {fetchUserById} = useUserContext();
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
     const [caption, setCaption] = useState<string>('');
@@ -57,20 +59,21 @@ export interface CreatePostDialogProps {
       authorId: loggedInUser.id.toString()
     };
 
-    console.log('Attempting to create post with: ', newPost);
+    if(caption === "" || caption === null){
+      toast.error("Caption is required")
+      return;
+    }
 
     try {
       const createdPost = await createPost(newPost);
 
       if (!createdPost) {
-       console.error('Post creation returned undefined');
+       toast.error('Post creation returned undefined');
       }
-
-      console.log('Post created successfully: ', createdPost);
-
-      onClose(); //close modal after success
+      toast.success("Post created successfully");
+      onCloseAll(); //close modal after success
     } catch (error) {
-      console.error('Exception thrown during post creation:', error);
+      toast.error(`Exception thrown during post creation:, ${error}`);
     }
   };
 
