@@ -16,7 +16,12 @@ const Feed = () => {
         const response = await getPosts();
         if (!response) throw new Error(`HTTP error!`);
         setLoading(false);
-        setPosts(response.data);
+        const sortedData = response.data.sort((a, b) => {
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        });
+        setPosts(sortedData);
       } catch (error) {
         console.error("Failed to fetch data:", error);
         setLoading(false);
@@ -42,6 +47,7 @@ const Feed = () => {
                 content={item.caption}
                 location={item.location}
                 likeCount={item.likeCount}
+                image={item.image}
               />
             </Box>
           );

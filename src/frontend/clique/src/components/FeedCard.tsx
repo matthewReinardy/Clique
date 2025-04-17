@@ -17,6 +17,7 @@ interface FeedCardProps {
   content: string;
   location: string;
   likeCount: number;
+  image: string;
 }
 
 export default function FeedCard({
@@ -25,7 +26,17 @@ export default function FeedCard({
   content,
   location,
   likeCount,
+  image,
 }: FeedCardProps) {
+  const formattedDate = new Date(date).toLocaleString("en-US", {
+    month: "short", // "Apr"
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader
@@ -40,12 +51,12 @@ export default function FeedCard({
           </IconButton>
         }
         title={username}
-        subheader={date}
+        subheader={formattedDate}
       />
       <CardMedia
         component="img"
         height="194"
-        image="/static/images/cards/paella.jpg"
+        image={`data:image/jpeg;base64,${image}`}
         alt="No Photo"
       />
       <CardContent>
