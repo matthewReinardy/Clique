@@ -1,13 +1,13 @@
 import {
   Box,
   Button,
+  Checkbox,
   DialogContent,
-  Divider,
+  FormControlLabel,
   IconButton,
   TextField,
   Typography,
-  Checkbox,
-  FormControlLabel,
+  useTheme,
 } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -18,25 +18,23 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { loggedInUserId } from "../types/loggedInUser";
 import { User, UserId } from "../types/userTypes";
 import { getUserById } from "../api/userApi";
-// import { PostCreationRequest } from '../types/postTypes';
 import { PostCreationRequest } from "../types/postTypes";
 import { createPost } from "../api/postApi";
-import { toast } from "react-toastify";
 import PhotoUpload from "./PhotoUpload";
+import { toast } from "react-toastify";
 
 export interface CreatePostDialogProps {
   open: boolean;
   onClose: () => void;
-  onCloseAll: () => void;
   onShare: () => void;
 }
 
 const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
   open,
   onClose,
-  onCloseAll,
   onShare,
 }) => {
+  const theme = useTheme();
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [caption, setCaption] = useState<string>("");
   const [tags, setTags] = useState<string>("");
@@ -67,12 +65,11 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
     if (!loggedInUser) return;
 
     if (file === null) {
-      toast.error("Image is required");
+      toast.error("No image selected");
       return;
     }
-
-    if (caption === "" || caption === null) {
-      toast.error("Caption is required");
+    if (caption === null || caption === "") {
+      toast.error("No caption");
       return;
     }
 
@@ -90,28 +87,39 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
       if (!createdPost) {
         toast.error("Post creation returned undefined");
       }
+
       toast.success("Post created successfully");
-      onCloseAll(); //close modal after success
+
+      onClose(); //close modal after success
     } catch (error) {
-      toast.error(`Exception thrown during post creation:, ${error}`);
+      toast.error(`Exception thrown during post creation: ${error}`);
     }
   };
 
   return (
     <Dialog fullWidth onClose={onClose} open={open}>
-      <DialogTitle>
+      <DialogTitle sx={{ backgroundColor: theme.palette.customColors.buff }}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <IconButton onClick={onClose}>
             <ArrowBackIcon />
           </IconButton>
-          <Typography>Create New Post</Typography>
+          <Typography
+            sx={{
+              color: theme.palette.customColors.zomp,
+              fontWeight: "bold",
+              fontSize: 24,
+            }}
+          >
+            Create New Post
+          </Typography>
           {/* posts to database */}
           <Button onClick={handleSubmit}>Share</Button>
         </Box>
-        <Divider />
       </DialogTitle>
 
-      <DialogContent>
+      <DialogContent
+        sx={{ backgroundColor: theme.palette.customColors.champagne }}
+      >
         <Grid container>
           {/* uploaded photo */}
           <Grid size={8}>
@@ -133,36 +141,44 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
               onChange={(e) => setCaption(e.target.value)}
               sx={{ marginTop: 2 }}
             />
-            <Divider sx={{ marginTop: 2 }} />
-
             {/* open location textbox */}
-            <Button onClick={() => setShowLocationTextbox(true)}>
+            <Button
+              sx={{ marginTop: 1, width: "100%" }}
+              onClick={() => setShowLocationTextbox(true)}
+            >
               Add location
             </Button>
             {showLocationTextbox && (
               <TextField
+                sx={{ marginTop: 1 }}
                 placeholder="Enter location..."
                 onChange={(e) => setLocation(e.target.value)}
               />
             )}
 
             {/* open tags textbox */}
-            <Button onClick={() => setShowTagsTextbox(true)}>Add tags</Button>
+            <Button
+              sx={{ marginTop: 1, width: "100%" }}
+              onClick={() => setShowTagsTextbox(true)}
+            >
+              Add tags
+            </Button>
             {showTagsTextbox && (
               <TextField
+                sx={{ marginTop: 1 }}
                 placeholder="Enter tags..."
                 onChange={(e) => setTags(e.target.value)}
               />
             )}
             {loggedInUser?.accountType === "business" && (
               <FormControlLabel
+                sx={{ marginTop: 1 }}
                 control={
                   <Checkbox checked={isAd} onChange={() => setIsAd(!isAd)} />
                 }
-                label="Post as Ad?"
+                label="Ad"
               />
             )}
-            <Divider />
           </Grid>
         </Grid>
       </DialogContent>

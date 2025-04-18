@@ -1,15 +1,15 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import { ThemeProvider } from '@emotion/react'
-import { createTheme } from '@mui/material/styles'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App.tsx";
+import { ThemeProvider } from "@emotion/react";
+import { createTheme } from "@mui/material/styles";
 
 declare module "@mui/material/styles" {
   //How custom colors can be accessed:
   interface Palette {
     customColors: {
-      zomp: string,
-      champagne: string,
+      zomp: string;
+      champagne: string;
       buff: string;
       sienna: string;
       blackBean: string;
@@ -30,20 +30,32 @@ declare module "@mui/material/styles" {
 const theme = createTheme({
   palette: {
     customColors: {
-      zomp: "38AF93",
-      champagne: "F2E0D5",
+      zomp: "#38AF93",
+      champagne: "#F2E0D5",
       buff: "#E6A57E",
-      sienna: "E6A57E",
-      blackBean: "401201",
+      sienna: "#8C2703",
+      blackBean: "#401201",
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#38AF93", // default background
+          color: "#fff", // text color
+          "&:hover": {
+            backgroundColor: "#38AF93",
+          },
+        },
+      },
+    },
+  },
+});
 
-})
-
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <App />
     </ThemeProvider>
   </StrictMode>
-)
+);

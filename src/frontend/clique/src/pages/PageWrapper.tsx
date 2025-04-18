@@ -11,7 +11,7 @@ const PageWrapper = ({ children }: PageWrapperProps) => {
   return (
     <>
       <SideBar />
-      <Box sx={{ paddingLeft: 25 }}>{children}</Box>
+      <Box sx={{ paddingLeft: 30 }}>{children}</Box>
     </>
   );
 };

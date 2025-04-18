@@ -7,6 +7,7 @@ import UserListPage from "./pages/UserListPage";
 import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
 import MyFeed from "./pages/MyFeed";
+import "./app.css";
 
 export default function App() {
   return (
