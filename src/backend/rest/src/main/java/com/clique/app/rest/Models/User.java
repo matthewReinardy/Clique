@@ -76,6 +76,14 @@ public class User {
     @Column(nullable = false)
     private Integer postCount = 0;
 
+    public void updatePostCount() {
+        if (this.posts != null) {
+            this.postCount = this.posts.size();
+        } else {
+            this.postCount = 0;
+        }
+    }
+
     // One user can have many posts
     @OneToMany(mappedBy = "author")
     @JsonIgnoreProperties("author")
