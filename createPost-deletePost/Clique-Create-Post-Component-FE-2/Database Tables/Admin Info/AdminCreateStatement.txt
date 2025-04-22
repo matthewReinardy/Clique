@@ -1,2 +1,0 @@
-INSERT INTO admin (account_type, email, password, username)
-VALUES("Admin", "Administrator@Clique.com", "admin123", "Administrator")
