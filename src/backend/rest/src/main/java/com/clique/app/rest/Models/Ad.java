@@ -17,6 +17,7 @@ public class Ad {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
     @Column(nullable = false)
     private boolean display;
 
@@ -35,4 +36,9 @@ public class Ad {
 
     public void setIsApproved(boolean isApproved) {
     }
+
+    public boolean isApproved() {
+        return isApproved;
+    }
+
 }
