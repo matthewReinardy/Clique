@@ -1,0 +1,135 @@
+CREATE TABLE `user` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `account_type` VARCHAR(255) DEFAULT NULL,
+    `bio` VARCHAR(255) DEFAULT NULL,
+    `date_of_birth` DATE DEFAULT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `first_name` VARCHAR(255) NOT NULL,
+    `follower_count` INT NOT NULL,
+    `following_count` INT NOT NULL,
+    `is_active` BIT(1) NOT NULL,
+    `is_private` BIT(1) DEFAULT NULL,
+    `is_suspended` BIT(1) NOT NULL,
+    `is_verified` BIT(1) DEFAULT NULL,
+    `last_name` VARCHAR(255) NOT NULL,
+    `location` VARCHAR(255) DEFAULT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `phone_number` VARCHAR(255) DEFAULT NULL,
+    `post_count` INT NOT NULL,
+    `profile_picture` VARCHAR(255) DEFAULT NULL,
+    `username` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `UKob8kqyqqgmefl0aco34akdtpe` (`email`),
+    UNIQUE KEY `UKsb8bbouer5wak8vyiiy4pf2bx` (`username`)
+)  ENGINE=INNODB AUTO_INCREMENT=10 DEFAULT CHARSET=UTF8MB4 COLLATE = UTF8MB4_0900_AI_CI;
+;
+
+CREATE TABLE `ad` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `display` bit(1) NOT NULL,
+  `is_approved` bit(1) NOT NULL,
+  `media_url` varchar(255) NOT NULL,
+  `user_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK69ephc15qrc01y7jpai17ai3o` (`user_id`),
+  CONSTRAINT `FK69ephc15qrc01y7jpai17ai3o` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `admin` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `account_type` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UKc0r9atamxvbhjjvy5j8da1kam` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `claims` (
+  `claimID` int NOT NULL AUTO_INCREMENT,
+  `userID` bigint NOT NULL,
+  `content` varchar(1000) NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`claimID`),
+  KEY `user_idx` (`userID`),
+  CONSTRAINT `user` FOREIGN KEY (`userID`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `comment` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `content` varchar(500) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `author_id` bigint NOT NULL,
+  `post_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKh1gtv412u19wcbx22177xbkjp` (`author_id`),
+  KEY `FKs1slvnkuemjsq2kj4h3vhx7i1` (`post_id`),
+  CONSTRAINT `FKh1gtv412u19wcbx22177xbkjp` FOREIGN KEY (`author_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `FKs1slvnkuemjsq2kj4h3vhx7i1` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `help_center_claim` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(6) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `issue_type` enum('BUG','CONTENT_MODERATION','TECHNICAL_SUPPORT') NOT NULL,
+  `status` enum('CLOSED','IN_PROGRESS','OPEN') NOT NULL,
+  `user_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKhw0vybkkr68mnk3hf5ch69ea9` (`user_id`),
+  CONSTRAINT `FKhw0vybkkr68mnk3hf5ch69ea9` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `post` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `content` varchar(500) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `mediaurl` varchar(255) DEFAULT NULL,
+  `share_count` int NOT NULL,
+  `author_id` bigint NOT NULL,
+  `media_file_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK12njtf8e0jmyb45lqfpt6ad89` (`author_id`),
+  CONSTRAINT `FK12njtf8e0jmyb45lqfpt6ad89` FOREIGN KEY (`author_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `user_followers` (
+  `user_id` bigint NOT NULL,
+  `follower_id` bigint NOT NULL,
+  PRIMARY KEY (`user_id`,`follower_id`),
+  KEY `FK70tvmgyh1ha7f6unsw8s6jej8` (`follower_id`),
+  CONSTRAINT `FK70tvmgyh1ha7f6unsw8s6jej8` FOREIGN KEY (`follower_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `FKokc5w6fibhnthvwnxjxyrlfc1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `user_following` (
+  `user_id` bigint NOT NULL,
+  `following_id` bigint NOT NULL,
+  PRIMARY KEY (`user_id`,`following_id`),
+  KEY `FKj0avh5q4feap4g0rkus640u4d` (`following_id`),
+  CONSTRAINT `FKj0avh5q4feap4g0rkus640u4d` FOREIGN KEY (`following_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `FKn4mj5gtsm47fikwbu41b6wi9k` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `user_interests` (
+  `user_id` bigint NOT NULL,
+  `interests` varchar(255) DEFAULT NULL,
+  KEY `FKfk6yib4h6a7ca0k3xwtr09eom` (`user_id`),
+  CONSTRAINT `FKfk6yib4h6a7ca0k3xwtr09eom` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `user_like` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(6) NOT NULL,
+  `type` enum('COMMENT','POST') NOT NULL,
+  `comment_id` bigint DEFAULT NULL,
+  `post_id` bigint DEFAULT NULL,
+  `user_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKl9foay05pnbymmwoo6u39pue` (`comment_id`),
+  KEY `FKmmu4u0rni71o1ctkfe0ay23gm` (`post_id`),
+  KEY `FKjsfb2urrv0shlti7sfy9iktpi` (`user_id`),
+  CONSTRAINT `FKjsfb2urrv0shlti7sfy9iktpi` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `FKl9foay05pnbymmwoo6u39pue` FOREIGN KEY (`comment_id`) REFERENCES `comment` (`id`),
+  CONSTRAINT `FKmmu4u0rni71o1ctkfe0ay23gm` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
