@@ -93,6 +93,16 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties("user")
     private List<HelpCenterClaim> claims;
+    // a user, BUSINESS ONLY, can have many ads
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
+    private List<Ad> ads;
+
+    // helper method that will determine a business account
+    // used for ad display logic down the line
+    public boolean isBusinessAccount() {
+        return "Business".equalsIgnoreCase(this.accountType);
+    }
 
     // Many-to-Many relationship for followers
     @ManyToMany
