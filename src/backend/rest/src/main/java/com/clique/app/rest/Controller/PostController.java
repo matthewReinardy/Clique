@@ -31,7 +31,7 @@ public class PostController {
     // Get all posts
     @GetMapping
     public List<Post> getAllPosts() {
-        return postRepo.findAll();
+        return postRepo.findAllByOrderByCreatedAtDesc();
     }
 
     /* FOR TESTING THE BASE 64 IMG
