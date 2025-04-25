@@ -67,6 +67,17 @@ public class Post {
     @Column
     private Integer shareCount = 0;
 
+    @Column(nullable = false)
+    private boolean isAd = false;
+
+    public boolean isAd() {
+        return isAd;
+    }
+
+    public void setAd(boolean isAd) {
+        this.isAd = isAd;
+    }
+
     // Dynamically calculates and returns the like count for this specific Post
     public int getLikeCount() {
         if (likes == null) {
