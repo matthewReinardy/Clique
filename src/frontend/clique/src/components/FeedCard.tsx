@@ -8,8 +8,10 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Flag from "@mui/icons-material/Flag";
+import { deletePost } from "../api/postApi";
+import { toast } from "react-toastify";
 
 interface FeedCardProps {
   username: string;
@@ -18,6 +20,8 @@ interface FeedCardProps {
   location: string;
   likeCount: number;
   image: string;
+  tag: string;
+  postId: Number;
 }
 
 export default function FeedCard({
@@ -27,6 +31,8 @@ export default function FeedCard({
   location,
   likeCount,
   image,
+  tag,
+  postId,
 }: FeedCardProps) {
   const formattedDate = new Date(date).toLocaleString("en-US", {
     month: "short", // "Apr"
@@ -36,6 +42,19 @@ export default function FeedCard({
     minute: "2-digit",
     hour12: true,
   });
+
+  const handleDelete = () => {
+    const deleteP = async () => {
+      try {
+        const response = await deletePost(postId);
+        if (response) toast.success("Post deleted successfully");
+      } catch (error) {
+        toast.error(`Error: ${error}`);
+      }
+    };
+
+    deleteP();
+  };
 
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -69,13 +88,19 @@ export default function FeedCard({
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {location}
         </Typography>
+        <Typography
+          variant="body2"
+          sx={{ color: "text.secondary", fontStyle: "italic" }}
+        >
+          {tag}
+        </Typography>
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
+        <IconButton onClick={handleDelete} aria-label="delete">
+          <DeleteIcon />
         </IconButton>
       </CardActions>
     </Card>

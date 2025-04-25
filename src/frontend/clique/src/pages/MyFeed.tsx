@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 import FeedCard from "../components/FeedCard";
 import PageWrapper from "./PageWrapper";
-import { getPosts } from "../api/postApi";
-import { AllPosts } from "../types/postTypes";
+import { getFollowerPosts, getPosts } from "../api/postApi";
+import { AllPostsFolowers } from "../types/postTypes";
 import { Box } from "@mui/material";
+import { loggedInUserId } from "../types/loggedInUser";
+import { UserId } from "../types/userTypes";
 
-const Feed = () => {
-  const [posts, setPosts] = useState<AllPosts[]>();
+const MyFeed = () => {
+  const userId = loggedInUserId as UserId;
+  const [posts, setPosts] = useState<AllPostsFolowers[]>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await getPosts();
+        const response = await getFollowerPosts(userId);
+        console.log(response);
         if (!response) throw new Error(`HTTP error!`);
         setLoading(false);
         const sortedData = response.data.sort((a, b) => {
@@ -21,8 +25,8 @@ const Feed = () => {
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
         });
+        console.log(sortedData);
         setPosts(sortedData);
-        console.log(response);
       } catch (error) {
         console.error("Failed to fetch data:", error);
         setLoading(false);
@@ -32,24 +36,26 @@ const Feed = () => {
     fetchData();
   }, []);
 
+  console.log(posts);
+
   return (
     <PageWrapper>
-      <h1>Explore</h1>
+      <h1>My Feed</h1>
       {loading ? (
         <p>Loading...</p>
       ) : (
         posts?.map((item, index) => {
           return (
-            <Box key={index} sx={{ padding: 2 }}>
+            <Box sx={{ padding: 2 }}>
               <FeedCard
                 key={index}
-                username={item.author.username}
+                username={item.authorUsername}
                 date={item.createdAt}
                 content={item.caption}
                 location={item.location}
                 likeCount={item.likeCount}
                 image={item.image}
-                tag={item.tags}
+                tag={item.tag}
                 postId={item.id}
               />
             </Box>
@@ -60,4 +66,4 @@ const Feed = () => {
   );
 };
 
-export default Feed;
+export default MyFeed;

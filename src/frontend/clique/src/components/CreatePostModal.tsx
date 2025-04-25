@@ -154,7 +154,7 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
                 onChange={(e) => setTags(e.target.value)}
               />
             )}
-            {loggedInUser?.accountType === "premium" && (
+            {loggedInUser?.accountType === "business" && (
               <FormControlLabel
                 control={
                   <Checkbox checked={isAd} onChange={() => setIsAd(!isAd)} />

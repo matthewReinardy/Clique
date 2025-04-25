@@ -6,6 +6,7 @@ import Feed from "./pages/Feed";
 import UserListPage from "./pages/UserListPage";
 import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
+import MyFeed from "./pages/MyFeed";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Feed />} />
+              <Route path="/myFeed" element={<MyFeed />} />
               <Route path="/userlist" element={<UserListPage />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/profile" element={<Profile />} />

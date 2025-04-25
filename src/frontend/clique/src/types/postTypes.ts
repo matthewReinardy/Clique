@@ -21,6 +21,18 @@ export interface AllPosts {
   likeCount: number;
   location: string;
   image: string;
+  tags: string;
+}
+
+export interface AllPostsFolowers {
+  id: number;
+  authorUsername: string;
+  caption: string;
+  createdAt: string;
+  likeCount: number;
+  location: string;
+  image: string;
+  tag: string;
 }
 
 export interface Post {

@@ -12,7 +12,6 @@ const PhotoUpload = ({ handleFileUpload }: PhotoUploadProps) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       handleFileUpload(selectedFile);
-      console.log(selectedFile);
       setPreview(URL.createObjectURL(selectedFile));
     }
   };
