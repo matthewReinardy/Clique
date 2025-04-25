@@ -52,6 +52,10 @@ public class AdsController {
             if (imageFile != null && !imageFile.isEmpty()) {
                 imageBytes = imageFile.getBytes();
             }
+            // validation to ensure that business accounts are the only account(s) creating ads
+            if (!"Business".equalsIgnoreCase(user.getAccountType())) {
+                return ResponseEntity.status(403).body("Only Business accounts can create ads.");
+            }
 
             // create the ad
             Ad ad = new Ad();
@@ -69,6 +73,7 @@ public class AdsController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body("Error: " + e.getMessage());
         }
+
     }
 
     // delete an ad
@@ -83,4 +88,6 @@ public class AdsController {
             return ResponseEntity.status(404).body("Error: " + e.getMessage());
         }
     }
+
+
 }

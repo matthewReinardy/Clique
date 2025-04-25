@@ -77,6 +77,8 @@ public class PostController {
 
             // Save the post to the DB
             postRepo.save(post);
+            author.updatePostCount();
+            userRepo.save(author);
             return ResponseEntity.ok().body("Post created successfully");
 
             /* First try catch handles for the image being too large,
@@ -138,14 +140,17 @@ public class PostController {
             // Find the post we are deleting
             Post post = postRepo.findById(id)
                     .orElseThrow(() -> new RuntimeException("Post not found"));
-            // If post is found, delete it
+
+            User author = post.getAuthor();
             postRepo.delete(post);
+            author.updatePostCount();
+            userRepo.save(author);
             return ResponseEntity.ok().body("Post deleted successfully");
         } catch(RuntimeException e) {
             // If not return a 404
             return ResponseEntity.status(404).body("Error: " + e.getMessage());
         }
-
-
     }
+
+
 }

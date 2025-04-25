@@ -76,6 +76,14 @@ public class User {
     @Column(nullable = false)
     private Integer postCount = 0;
 
+    public void updatePostCount() {
+        if (this.posts != null) {
+            this.postCount = this.posts.size();
+        } else {
+            this.postCount = 0;
+        }
+    }
+
     // One user can have many posts
     @OneToMany(mappedBy = "author")
     @JsonIgnoreProperties("author")
@@ -85,6 +93,16 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties("user")
     private List<HelpCenterClaim> claims;
+    // a user, BUSINESS ONLY, can have many ads
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
+    private List<Ad> ads;
+
+    // helper method that will determine a business account
+    // used for ad display logic down the line
+    public boolean isBusinessAccount() {
+        return "Business".equalsIgnoreCase(this.accountType);
+    }
 
     // Many-to-Many relationship for followers
     @ManyToMany
