@@ -50,6 +50,7 @@ const Feed = () => {
                 image={item.image}
                 tag={item.tags}
                 postId={item.id}
+                isAd={item.ad}
               />
             </Box>
           );

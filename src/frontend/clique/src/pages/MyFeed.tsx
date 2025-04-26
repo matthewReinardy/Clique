@@ -53,6 +53,7 @@ const MyFeed = () => {
                 image={item.image}
                 tag={item.tag}
                 postId={item.id}
+                isAd={item.ad}
               />
             </Box>
           );
