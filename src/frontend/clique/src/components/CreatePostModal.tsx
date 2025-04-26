@@ -82,6 +82,7 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
       location,
       authorId: loggedInUser.id.toString(),
       file,
+      isAd,
     };
 
     try {

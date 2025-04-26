@@ -53,4 +53,5 @@ export interface PostCreationRequest {
   location: string;
   authorId: string;
   file: File;
+  isAd: boolean;
 }

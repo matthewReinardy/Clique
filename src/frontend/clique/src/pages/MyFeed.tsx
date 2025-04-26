@@ -17,7 +17,6 @@ const MyFeed = () => {
       setLoading(true);
       try {
         const response = await getFollowerPosts(userId);
-        console.log(response);
         if (!response) throw new Error(`HTTP error!`);
         setLoading(false);
         const sortedData = response.data.sort((a, b) => {
@@ -25,7 +24,6 @@ const MyFeed = () => {
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
         });
-        console.log(sortedData);
         setPosts(sortedData);
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -35,8 +33,6 @@ const MyFeed = () => {
 
     fetchData();
   }, []);
-
-  console.log(posts);
 
   return (
     <PageWrapper>
