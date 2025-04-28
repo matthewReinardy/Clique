@@ -40,6 +40,11 @@ export default function SideBar() {
     setPhotoModalOpen(false);
   };
 
+  const handleLogout = () => {
+    localStorage.clear()
+    window.location.reload()
+  }
+
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation">
       <List>
@@ -74,7 +79,7 @@ export default function SideBar() {
           </ListItemButton>
         </ListItem>
       </List>
-      <Button>Log Out</Button>
+      <Button onClick={handleLogout}>Log Out</Button>
     </Box>
   );
 

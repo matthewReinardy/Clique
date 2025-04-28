@@ -1,10 +1,8 @@
+import { Container } from "@mui/material"
 import { loginAsRole } from "../api/authApi"
-import { useNavigate } from "react-router-dom"
 import { Button } from '@mui/material'
 
-
 const Login = () => {
-  const navigate = useNavigate()
 
   const handleLogin = async (role: 'user' | 'business' | 'admin') => {
     try {
@@ -18,7 +16,7 @@ const Login = () => {
         localStorage.setItem('role', role)
         localStorage.setItem('username', username)
 
-        navigate(`/${role}-dashboard`)
+        window.location.reload()
       } else {
         throw new Error(response.message || "Login failed.")
       }
@@ -29,29 +27,30 @@ const Login = () => {
   }
 
   return (
-    <div>
-      <h1>Select Your Role</h1>
-      <Button
-        variant="contained"
-        onClick={() => handleLogin("user")}
-      >
-        User
-      </Button>
-      <Button
-        variant="contained"
-        onClick={() => handleLogin("business")}
-      >
-        Business
-      </Button>
-      <Button
-        variant="contained"
-        onClick={() => handleLogin("admin")}
-      >
-        Admin
-      </Button>
-    </div>
+    <Container>
+      <div>
+        <h1>Select Your Role</h1>
+        <Button
+          variant="contained"
+          onClick={() => handleLogin("user")}
+        >
+          User
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => handleLogin("business")}
+        >
+          Business
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => handleLogin("admin")}
+        >
+          Admin
+        </Button>
+      </div>
+    </Container>
   )
-
 }
 
 export default Login;

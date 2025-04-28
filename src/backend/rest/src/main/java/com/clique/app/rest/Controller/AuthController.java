@@ -1,13 +1,15 @@
 package com.clique.app.rest.Controller;
 
+import com.clique.app.rest.Models.Admin;
 import com.clique.app.rest.Models.User;
+import com.clique.app.rest.Repo.AdminRepo;
 import com.clique.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -16,34 +18,62 @@ public class AuthController {
     @Autowired
     private UserRepo userRepo;
 
-    @PostMapping("/login")
-    public String login(@RequestBody User user) {
-        User existingUser = userRepo.findByUsername(user.getUsername());
+    @Autowired
+    private AdminRepo adminRepo;
 
-        if (existingUser == null) {
-            return "User not found";
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> request) {
+        Map<String, Object> response = new HashMap<>();
+        String username = request.get("username");
+
+        //Check within Users
+        User existingUser = userRepo.findByUsername(username);
+        if (existingUser != null) {
+            response.put("success", true);
+            response.put("data", existingUser);
+            return ResponseEntity.ok(response);
         }
 
-        return "Login successful";
+        //If not found within Users, check Admin
+        Admin existingAdmin = adminRepo.findByUsername(username);
+        if (existingAdmin != null) {
+            response.put("success", true);
+            response.put("data", existingAdmin);
+            return ResponseEntity.ok(response);
+        }
+
+        //If no match found
+        response.put("success", false);
+        response.put("message", "User not found");
+        return ResponseEntity.status(404).body(response);
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> register(@RequestBody User user) {
+        Map<String, Object> response = new HashMap<>();
 
         if (user.getFirstName() == null || user.getLastName() == null) {
-            return "First name and last name are required";
+            response.put("success", false);
+            response.put("message", "First name and last name are required");
+            return ResponseEntity.badRequest().body(response);
         }
 
         if (userRepo.findByUsername(user.getUsername()) != null) {
-            return "Username already in use";
+            response.put("success", false);
+            response.put("message", "Username already in use");
+            return ResponseEntity.badRequest().body(response);
         }
 
         if (userRepo.findByEmail(user.getEmail()) != null) {
-            return "Email already in use";
+            response.put("success", false);
+            response.put("message", "Email already in use");
+            return ResponseEntity.badRequest().body(response);
         }
 
-        userRepo.save(user);
+        User savedUser = userRepo.save(user);
 
-        return "Registration successful";
+        response.put("success", true);
+        response.put("data", savedUser);
+        return ResponseEntity.ok(response);
     }
 }
