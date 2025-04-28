@@ -4,11 +4,11 @@ import PageWrapper from "./PageWrapper";
 import { getFollowerPosts, getPosts } from "../api/postApi";
 import { AllPostsFolowers } from "../types/postTypes";
 import { Box } from "@mui/material";
-import { loggedInUserId } from "../types/loggedInUser";
 import { UserId } from "../types/userTypes";
+import { loggedInUserId } from "../session/userRole";
 
 const MyFeed = () => {
-  const userId = loggedInUserId as UserId;
+  const userId = loggedInUserId as UserId
   const [posts, setPosts] = useState<AllPostsFolowers[]>();
   const [loading, setLoading] = useState(true);
 

@@ -15,14 +15,13 @@ import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid2";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { loggedInUserId } from "../types/loggedInUser";
 import { User, UserId } from "../types/userTypes";
 import { getUserById } from "../api/userApi";
-// import { PostCreationRequest } from '../types/postTypes';
 import { PostCreationRequest } from "../types/postTypes";
 import { createPost } from "../api/postApi";
 import { toast } from "react-toastify";
 import PhotoUpload from "./PhotoUpload";
+import { loggedInUserId } from "../session/userRole";
 
 export interface CreatePostDialogProps {
   open: boolean;

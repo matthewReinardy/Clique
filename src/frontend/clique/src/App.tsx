@@ -3,17 +3,15 @@ import { UserProvider } from "./context/UserContext"
 import { ToastContainer } from "react-toastify"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Feed from "./pages/Feed"
+import MyFeed from "./pages/MyFeed"; 
 import UserListPage from "./pages/UserListPage"
 import Notifications from "./pages/Notifications"
 import Profile from "./pages/Profile"
 import LoginPage from "./pages/Login"
+import { role, isAdmin, isUserOrBusiness } from "./session/userRole";
 
-export default function App() { 
 
-  const role = localStorage.getItem("role")
-
-  const isAdmin = role === "Admin"
-  const isUserOrBusiness = role === "user" || role === "business"
+export default function App() {
 
   return (
     <UserProvider>
@@ -25,13 +23,13 @@ export default function App() {
 
           {isAdmin && (
             <>
-              <Route 
-                path="/" 
+              <Route
+                path="/"
                 element={
                   <Container>
                     <UserListPage />
                   </Container>
-                } 
+                }
               />
               <Route path="*" element={<Navigate to="/" />} />
             </>
@@ -44,6 +42,14 @@ export default function App() {
                 element={
                   <Container>
                     <Feed />
+                  </Container>
+                }
+              />
+              <Route
+                path="/myFeed"
+                element={
+                  <Container>
+                    <MyFeed />
                   </Container>
                 }
               />
