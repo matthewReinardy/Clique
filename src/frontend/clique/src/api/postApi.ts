@@ -1,6 +1,7 @@
 import { makeRequest } from "./apiService";
 import {
   AllPosts,
+  AllPostsFolowers,
   ApiResponse,
   Post,
   PostCreationRequest,
@@ -9,6 +10,18 @@ import {
 //FETCH: all posts
 export const getPosts = (): Promise<ApiResponse<AllPosts[]>> => {
   return makeRequest<AllPosts[]>(`posts`, "GET");
+};
+
+//FETCH: all posts for folowers
+export const getFollowerPosts = (
+  userId: Number
+): Promise<ApiResponse<AllPostsFolowers[]>> => {
+  return makeRequest<AllPostsFolowers[]>(`feed/${userId}`, "GET");
+};
+
+//FETCH: all posts for folowers
+export const deletePost = (postId: Number) => {
+  return makeRequest(`posts/${postId}`, "DELETE");
 };
 
 //FETCH: a single post by ID

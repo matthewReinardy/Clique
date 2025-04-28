@@ -20,6 +20,21 @@ export interface AllPosts {
   createdAt: string;
   likeCount: number;
   location: string;
+  image: string;
+  tags: string;
+  ad: boolean;
+}
+
+export interface AllPostsFolowers {
+  id: number;
+  authorUsername: string;
+  caption: string;
+  createdAt: string;
+  likeCount: number;
+  location: string;
+  image: string;
+  tag: string;
+  ad: boolean;
 }
 
 export interface Post {
@@ -31,7 +46,7 @@ export interface Post {
   mediaUrl: string;
   shareCount: number;
   authorId: UserId;
-  mediaFileName: string;
+  file: string;
 }
 
 export interface PostCreationRequest {
@@ -39,4 +54,6 @@ export interface PostCreationRequest {
   tags: string;
   location: string;
   authorId: string;
+  file: File;
+  isAd: boolean;
 }

@@ -59,7 +59,7 @@ public class ClaimController {
     }
 
     // delete a claim
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("delete/{id}")
     public String deleteClaim(@PathVariable Long id) {
         HelpCenterClaim claim = helpCenterClaimRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Claim not found with ID: " + id));

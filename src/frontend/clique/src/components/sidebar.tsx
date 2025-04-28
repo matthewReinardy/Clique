@@ -8,7 +8,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import SelectPhotoDialog from "./SelectPhotoModal";
 import CreatePostDialog from "./CreatePostModal";
 import { useState } from "react";
@@ -52,6 +51,12 @@ export default function SideBar() {
           <ListItemButton onClick={() => navigate("/")}>
             <ListItemIcon>{<InboxIcon />}</ListItemIcon>
             <ListItemText primary={"Home"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem key={"My Feed"} disablePadding>
+          <ListItemButton onClick={() => navigate("/myFeed")}>
+            <ListItemIcon>{<InboxIcon />}</ListItemIcon>
+            <ListItemText primary={"My Feed"} />
           </ListItemButton>
         </ListItem>
         <ListItem key={"Notifications"} disablePadding>
