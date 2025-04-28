@@ -9,7 +9,6 @@ interface UserContextType {
     error: string | null,
     fetchAllUsers: () => Promise<void>,
     fetchUserById: (userId: UserId) => Promise<User | null>,
-    fetchUserById: (userId: UserId) => Promise<User | null>,
     addUser: (user: UserCreationRequest) => Promise<void>,
     editUser: (userId: UserId, user: Partial<UserCreationRequest>) => Promise<void>,
     removeUser: (userId: UserId) => Promise<void>,
