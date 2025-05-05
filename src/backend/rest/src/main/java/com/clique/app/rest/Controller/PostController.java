@@ -31,7 +31,7 @@ public class PostController {
     // Get all posts
     @GetMapping
     public List<Post> getAllPosts() {
-        return postRepo.findAll();
+        return postRepo.findAllByOrderByCreatedAtDesc();
     }
 
     /* FOR TESTING THE BASE 64 IMG
@@ -54,11 +54,17 @@ public class PostController {
             @RequestParam("caption") String caption,
             @RequestParam("location") String location,
             @RequestParam(value = "tags", required = false) String tags,
-            @RequestParam("authorId") Long authorId) {
+            @RequestParam("authorId") Long authorId,
+            @RequestParam(value = "isAd", required = false, defaultValue = "false") boolean isAd) {
         try {
             // Check if the user exists
             User author = userRepo.findById(authorId)
                     .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Checking if the current logged in user is a busniess account and this is for an ad
+            if (isAd && !author.isBusinessAccount()) {
+                return ResponseEntity.status(403).body("Only business accounts can create ads");
+            }
 
             // This is when we read the image that was uploaded, and turning it into a byte array, which that is what we
             // will store in the DB
@@ -74,6 +80,7 @@ public class PostController {
             post.setTags(tags);
             post.setImage(imageData);
             post.setCreatedAt(LocalDateTime.now());
+            post.setAd(isAd);
 
             // Save the post to the DB
             postRepo.save(post);

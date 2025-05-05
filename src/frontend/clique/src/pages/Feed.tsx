@@ -22,7 +22,6 @@ const Feed = () => {
           );
         });
         setPosts(sortedData);
-        console.log(response);
       } catch (error) {
         console.error("Failed to fetch data:", error);
         setLoading(false);
@@ -51,6 +50,7 @@ const Feed = () => {
                 image={item.image}
                 tag={item.tags}
                 postId={item.id}
+                isAd={item.ad}
               />
             </Box>
           );

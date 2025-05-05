@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/feed")
@@ -83,6 +81,13 @@ public class FeedController {
                     }
                 }
             }
+
+            Collections.sort(feedPosts, new Comparator<Post>() {
+                @Override
+                public int compare(Post post1, Post post2) {
+                    return post2.getCreatedAt().compareTo(post1.getCreatedAt());
+                }
+            });
             // Convert to DTOs
             for (Post post : feedPosts) {
                 PostDTO dto = new PostDTO(

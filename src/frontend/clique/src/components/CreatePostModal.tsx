@@ -15,7 +15,6 @@ import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid2";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { loggedInUserId } from "../types/loggedInUser";
 import { User, UserId } from "../types/userTypes";
 import { getUserById } from "../api/userApi";
 import { PostCreationRequest } from "../types/postTypes";
@@ -79,6 +78,7 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
       location,
       authorId: loggedInUser.id.toString(),
       file,
+      isAd,
     };
 
     try {

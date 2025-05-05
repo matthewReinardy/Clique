@@ -22,6 +22,7 @@ interface FeedCardProps {
   image: string;
   tag: string;
   postId: Number;
+  isAd: boolean;
 }
 
 export default function FeedCard({
@@ -33,6 +34,7 @@ export default function FeedCard({
   image,
   tag,
   postId,
+  isAd,
 }: FeedCardProps) {
   const [liked, setLiked] = useState(false);
   const formattedDate = new Date(date).toLocaleString("en-US", {
@@ -80,6 +82,14 @@ export default function FeedCard({
         alt="No Photo"
       />
       <CardContent>
+        {isAd && (
+          <Typography
+            variant="body2"
+            sx={{ color: "grey", fontStyle: "italic", fontSize: "10px" }}
+          >
+            Sponsored
+          </Typography>
+        )}
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {likeCount} likes
         </Typography>

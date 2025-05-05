@@ -5,6 +5,7 @@ import { CommentId } from './userCommentTypes'
 //ApiResponse type for user data:
 export interface ApiResponse<T> { 
     data: T
+    success: boolean
     message?: string
 }
 

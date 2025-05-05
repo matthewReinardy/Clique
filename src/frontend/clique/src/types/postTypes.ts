@@ -22,6 +22,7 @@ export interface AllPosts {
   location: string;
   image: string;
   tags: string;
+  ad: boolean;
 }
 
 export interface AllPostsFolowers {
@@ -33,6 +34,7 @@ export interface AllPostsFolowers {
   location: string;
   image: string;
   tag: string;
+  ad: boolean;
 }
 
 export interface Post {
@@ -53,4 +55,5 @@ export interface PostCreationRequest {
   location: string;
   authorId: string;
   file: File;
+  isAd: boolean;
 }

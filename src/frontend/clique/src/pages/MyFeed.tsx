@@ -4,11 +4,11 @@ import PageWrapper from "./PageWrapper";
 import { getFollowerPosts, getPosts } from "../api/postApi";
 import { AllPostsFolowers } from "../types/postTypes";
 import { Box } from "@mui/material";
-import { loggedInUserId } from "../types/loggedInUser";
 import { UserId } from "../types/userTypes";
+import { loggedInUserId } from "../session/userRole";
 
 const MyFeed = () => {
-  const userId = loggedInUserId as UserId;
+  const userId = loggedInUserId as UserId
   const [posts, setPosts] = useState<AllPostsFolowers[]>();
   const [loading, setLoading] = useState(true);
 
@@ -17,7 +17,6 @@ const MyFeed = () => {
       setLoading(true);
       try {
         const response = await getFollowerPosts(userId);
-        console.log(response);
         if (!response) throw new Error(`HTTP error!`);
         setLoading(false);
         const sortedData = response.data.sort((a, b) => {
@@ -25,7 +24,6 @@ const MyFeed = () => {
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
         });
-        console.log(sortedData);
         setPosts(sortedData);
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -35,8 +33,6 @@ const MyFeed = () => {
 
     fetchData();
   }, []);
-
-  console.log(posts);
 
   return (
     <PageWrapper>
@@ -57,6 +53,7 @@ const MyFeed = () => {
                 image={item.image}
                 tag={item.tag}
                 postId={item.id}
+                isAd={item.ad}
               />
             </Box>
           );

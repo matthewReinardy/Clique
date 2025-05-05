@@ -61,11 +61,11 @@ export async function makeRequest<T, B = Record<string, string | File | undefine
         const contentType = response.headers.get("content-type");
 
         if (contentType && contentType.includes("application/json")) {
-            const data: T = await response.json();
-            return { data };
+            const data: T = await response.json()
+            return { success: true, data }
         } else {
-            const text = await response.text();
-            return { data: text as unknown as T }; // or handle appropriately
+            const text = await response.text()
+            return { success: true, data: text as unknown as T } // or handle appropriately
         }
     } catch (error: unknown) {
         if (error instanceof Error) {
