@@ -21,6 +21,7 @@ import { PostCreationRequest } from "../types/postTypes";
 import { createPost } from "../api/postApi";
 import PhotoUpload from "./PhotoUpload";
 import { toast } from "react-toastify";
+import { loggedInUserId } from "../session/userRole";
 
 export interface CreatePostDialogProps {
   open: boolean;

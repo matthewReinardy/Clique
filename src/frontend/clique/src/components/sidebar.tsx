@@ -103,7 +103,9 @@ export default function SideBar() {
           </ListItem>
         )}
       </List>
-      <Button sx={{ width: "100%" }}>Log Out</Button>
+      <Button sx={{ width: "100%" }} onClick={handleLogout}>
+        Log Out
+      </Button>
     </Box>
   );
 
