@@ -1,5 +1,5 @@
 # Clique
-Web III Project: Lexie, Lily, Bruno, Matt, and Abdilahi
+Web III Project: Lexie, Lily, Bruno, Matt
 
 A social media platform for users to share their life through photos.
 
