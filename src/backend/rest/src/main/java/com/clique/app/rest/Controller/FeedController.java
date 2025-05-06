@@ -59,27 +59,6 @@ public class FeedController {
                 List<Post> userPosts = postRepo.findByAuthor(followedUser);
                 feedPosts.addAll(userPosts);
 
-                // Check if the followed user is a business account, and show ads if they are
-                if ("Business".equalsIgnoreCase(followedUser.getAccountType())) {
-                    List<Ad> ads = adRepo.findByUser(followedUser);
-                    if (ads != null) {
-                        for (Ad ad : ads) {
-                                PostDTO adDto = new PostDTO(
-                                        ad.getId(),
-                                        "Sponsored", // caption for all ads
-                                        null,         // null location
-                                        null,         // null tag
-                                        "",           // empty creation date
-                                        ad.getUser().getUsername(),
-                                        0,            // default likes and comments
-                                        0,
-                                        ad.getImage()
-                                );
-                                feedDTOs.add(adDto); // Add the ad to the feedDTOs list
-
-                        }
-                    }
-                }
             }
 
             Collections.sort(feedPosts, new Comparator<Post>() {
@@ -99,7 +78,8 @@ public class FeedController {
                         post.getAuthor().getUsername(),
                         post.getLikeCount(),
                         post.getCommentCount(),
-                        post.getImage()
+                        post.getImage(),
+                        post.isAd()
                 );
                 feedDTOs.add(dto);
             }

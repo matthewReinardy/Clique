@@ -68,7 +68,7 @@ public class Post {
     private Integer shareCount = 0;
 
     @Column(nullable = false)
-    private boolean isAd = false;
+    private boolean isAd;
 
     public boolean isAd() {
         return isAd;
