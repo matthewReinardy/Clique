@@ -53,14 +53,6 @@ export default function App() {
                 }
               />
               <Route
-                path="/notifications"
-                element={
-                  <Container>
-                    <Notifications />
-                  </Container>
-                }
-              />
-              <Route
                 path="/profile"
                 element={
                   <Container>

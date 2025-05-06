@@ -68,7 +68,7 @@ export default function UserList() {
                 location: userToUpdate.location,
                 isPrivate: false,
                 isVerified: false,
-                profilePicture: "",
+                profilePicture: userToUpdate.profilePicture,
                 accountType: userToUpdate.accountType,
                 followerCount: 0,
                 followingCount: 0,
@@ -92,9 +92,8 @@ export default function UserList() {
     }
 
     const handleCreateSubmit = async () => {
-
         try {
-            await addUser(newUser)
+            await addUser(newUser) // Your `addUser` must support FormData
             setCreateOpen(false)
             alert(`The new user ${newUser.username} has been created successfully!`)
             await fetchAllUsers()
@@ -102,6 +101,7 @@ export default function UserList() {
             console.error("Error creating user:", error)
         }
     }
+    
 
     //Close the dialog
     const handleClose = () => {

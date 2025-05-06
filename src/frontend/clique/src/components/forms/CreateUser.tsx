@@ -1,13 +1,14 @@
 import { TextField, DialogActions, Button } from '@mui/material'
 import { User } from '../../types/userTypes'
 import { useState } from 'react'
+import PhotoUpload from '../PhotoUpload';
 
 interface CreateUserFormProps {
     user: User;
     onChange: (field: keyof User, value: string) => void;
-    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+    onSubmit: (event: React.FormEvent<HTMLFormElement>, uploadedFile: File | null) => void;
     isNewUser: boolean;
-}
+  }
 
 export default function CreateUserForm({
     user,
@@ -17,6 +18,7 @@ export default function CreateUserForm({
 }: CreateUserFormProps) {
     // State to hold validation errors
     const [errors, setErrors] = useState<Record<string, string>>({})
+    const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
     // Validation function
     const validate = (): boolean => {
@@ -58,7 +60,7 @@ export default function CreateUserForm({
 
         // Validate fields before submitting
         if (validate()) {
-            onSubmit(event)  // Only call onSubmit if validation passes
+            onSubmit(event, uploadedFile)  // Only call onSubmit if validation passes
         }
     }
 
@@ -144,6 +146,7 @@ export default function CreateUserForm({
                 fullWidth
                 margin="normal"
             />
+            <PhotoUpload handleFileUpload={setUploadedFile} />
             <DialogActions>
                 <Button type="submit">
                     {isNewUser ? 'Create User' : 'Save Changes'}

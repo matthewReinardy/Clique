@@ -66,14 +66,6 @@ export default function SideBar() {
                 <ListItemText primary={"My Feed"} />
               </ListItemButton>
             </ListItem>
-            <ListItem key={"Notifications"} disablePadding>
-              <ListItemButton onClick={() => navigate("/notifications")}>
-                <ListItemIcon>
-                  <img src="/icons/settings.svg" alt="logo" width={30} />
-                </ListItemIcon>
-                <ListItemText primary={"Notifications"} />
-              </ListItemButton>
-            </ListItem>
             <ListItem key={"Create Post"} disablePadding>
               <ListItemButton onClick={() => setPostModalOpen(true)}>
                 <ListItemIcon>
