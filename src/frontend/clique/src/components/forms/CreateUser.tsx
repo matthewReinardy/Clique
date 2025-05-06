@@ -8,7 +8,7 @@ interface CreateUserFormProps {
     onChange: (field: keyof User, value: string) => void;
     onSubmit: (event: React.FormEvent<HTMLFormElement>, uploadedFile: File | null) => void;
     isNewUser: boolean;
-  }
+}
 
 export default function CreateUserForm({
     user,
@@ -16,11 +16,11 @@ export default function CreateUserForm({
     onSubmit,
     isNewUser
 }: CreateUserFormProps) {
-    // State to hold validation errors
+    //State to hold validation errors
     const [errors, setErrors] = useState<Record<string, string>>({})
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
-    // Validation function
+    //Validation function
     const validate = (): boolean => {
         const newErrors: Record<string, string> = {}
 
@@ -54,13 +54,13 @@ export default function CreateUserForm({
         return true
     }
 
-    // Handle form submit
+    //Handle form submit
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        // Validate fields before submitting
+        //Validate fields before submitting
         if (validate()) {
-            onSubmit(event, uploadedFile)  // Only call onSubmit if validation passes
+            onSubmit(event, uploadedFile)  //Only call onSubmit if validation passes
         }
     }
 
