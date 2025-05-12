@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { User, defaultUser } from '../types/userTypes' 
 import CreateUserForm from './forms/CreateUser'
+import { toast } from "react-toastify";
 
 export default function UserList() {
 
@@ -26,6 +27,7 @@ export default function UserList() {
     const handleDelete = async (user: User) => {
         if (window.confirm(`Are you sure you want to DELETE ${user.username}'s account?`)) {
             await removeUser(user.id)
+            toast.success(`User ${user.id} has been deleted successfully.`)
         }
     }
 
@@ -75,10 +77,10 @@ export default function UserList() {
                 postCount: 0,
             })
             setUpdateOpen(false)
-            alert(`The user with the id of ${userToUpdate.id} (${userToUpdate.username}) has been successfully updated!}`)
             await fetchAllUsers()
+            toast.success(`User ${userToUpdate.id} (${userToUpdate.username}) has been updated successfully!}`)
         } catch (error) {
-            console.error("Error updating user:", error) 
+            toast.error(`Error updating user ${userToUpdate.id}: ${error}`) 
         }
         
     }
@@ -95,14 +97,13 @@ export default function UserList() {
         try {
             await addUser(newUser) // Your `addUser` must support FormData
             setCreateOpen(false)
-            alert(`The new user ${newUser.username} has been created successfully!`)
             await fetchAllUsers()
+            toast.success(`${newUser.username} has been created successfully!`)
         } catch (error) {
-            console.error("Error creating user:", error)
+            toast.error(`Error creating new user: ${error}`)
         }
     }
     
-
     //Close the dialog
     const handleClose = () => {
         setSelectedUser(null)

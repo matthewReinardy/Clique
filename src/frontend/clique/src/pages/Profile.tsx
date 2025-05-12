@@ -1,9 +1,10 @@
 import PageWrapper from "./PageWrapper";
+import UserProfileCard from "../components/UserProfileCard";
 
 const Profile = () => {
   return (
     <PageWrapper>
-      <h1>Profile</h1>
+      <UserProfileCard />
     </PageWrapper>
   );
 };
