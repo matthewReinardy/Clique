@@ -24,9 +24,9 @@ export default function UserProfileCard() {
     }
 
     //If the user is not a user or business account
-    if (!user || user.accountType !== "business") {
+    if (!user || (user.accountType !== "business" && user.accountType !== "user")) {
         return <Typography>User profile not found.</Typography>
-    } 
+    }
 
     return (
         <Card sx={{ display: "flex", margin: "20px", maxWidth: 600 }}>
