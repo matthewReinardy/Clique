@@ -7,11 +7,11 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Flag from "@mui/icons-material/Flag";
 import { deletePost } from "../api/postApi";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 interface FeedCardProps {
   username: string;
@@ -36,6 +36,7 @@ export default function FeedCard({
   postId,
   isAd,
 }: FeedCardProps) {
+  const [liked, setLiked] = useState(false);
   const formattedDate = new Date(date).toLocaleString("en-US", {
     month: "short", // "Apr"
     day: "numeric",
@@ -76,7 +77,7 @@ export default function FeedCard({
       />
       <CardMedia
         component="img"
-        height="194"
+        height="345"
         image={`data:image/jpeg;base64,${image}`}
         alt="No Photo"
       />
@@ -106,11 +107,18 @@ export default function FeedCard({
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+        <IconButton
+          aria-label="add to favorites"
+          onClick={() => setLiked(!liked)}
+        >
+          {liked ? (
+            <img src="/icons/clique-filled.svg" alt="logo" width={30} />
+          ) : (
+            <img src="/icons/clique-outline.svg" alt="logo" width={30} />
+          )}
         </IconButton>
         <IconButton onClick={handleDelete} aria-label="delete">
-          <DeleteIcon />
+          <img src="/icons/trash.svg" alt="logo" width={30} />
         </IconButton>
       </CardActions>
     </Card>

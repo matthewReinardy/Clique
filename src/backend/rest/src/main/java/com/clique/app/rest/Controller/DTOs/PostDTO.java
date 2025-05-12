@@ -15,4 +15,5 @@ public class PostDTO {
     private int likeCount;
     private int commentCount;
     private byte[] image;
+    private Boolean ad;
 }

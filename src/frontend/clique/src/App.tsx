@@ -1,18 +1,16 @@
-import { Container } from "@mui/material"
-import { UserProvider } from "./context/UserContext"
-import { ToastContainer } from "react-toastify"
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import Feed from "./pages/Feed"
-import MyFeed from "./pages/MyFeed"; 
-import UserListPage from "./pages/UserListPage"
-import Notifications from "./pages/Notifications"
-import Profile from "./pages/Profile"
-import LoginPage from "./pages/Login"
+import { Container } from "@mui/material";
+import { UserProvider } from "./context/UserContext";
+import { ToastContainer } from "react-toastify";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Feed from "./pages/Feed";
+import UserListPage from "./pages/UserListPage";
+import Profile from "./pages/Profile";
+import MyFeed from "./pages/MyFeed";
+import "./app.css";
+import LoginPage from "./pages/Login";
 import { role, isAdmin, isUserOrBusiness } from "./session/userRole";
 
-
 export default function App() {
-
   return (
     <UserProvider>
       <ToastContainer />
@@ -54,14 +52,6 @@ export default function App() {
                 }
               />
               <Route
-                path="/notifications"
-                element={
-                  <Container>
-                    <Notifications />
-                  </Container>
-                }
-              />
-              <Route
                 path="/profile"
                 element={
                   <Container>
@@ -78,5 +68,5 @@ export default function App() {
         </Routes>
       </BrowserRouter>
     </UserProvider>
-  )
+  );
 }

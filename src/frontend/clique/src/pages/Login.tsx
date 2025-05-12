@@ -1,55 +1,58 @@
-import { Container } from "@mui/material"
-import { loginAsRole } from "../api/authApi"
-import { Button } from '@mui/material'
+import { Container } from "@mui/material";
+import { loginAsRole } from "../api/authApi";
+import { Button } from "@mui/material";
+import PageWrapper from "./PageWrapper";
+import { Margin } from "@mui/icons-material";
+import { toast } from "react-toastify";
 
 const Login = () => {
-
-  const handleLogin = async (role: 'user' | 'business' | 'admin') => {
+  const handleLogin = async (role: "user" | "business" | "admin") => {
     try {
       const response = await loginAsRole(role)
 
       if (response.success && response.data) {
-        
         const { id, accountType: role, username } = response.data
 
-        localStorage.setItem('userId', id.toString())
-        localStorage.setItem('role', role)
-        localStorage.setItem('username', username)
+        localStorage.setItem("userId", id.toString())
+        localStorage.setItem("role", role)
+        localStorage.setItem("username", username)
 
-        window.location.reload()
+        window.location.reload();
       } else {
         throw new Error(response.message || "Login failed.")
       }
     } catch (error) {
-      console.error("Login failed:", error)
-      alert("failed to login.")
+      toast.error(`Login failed: ${error}`)
     }
   }
 
   return (
-    <Container>
+    <PageWrapper hideSideBar>
       <div>
         <h1>Select Your Role</h1>
         <Button
+          sx={{ margin: 1 }}
           variant="contained"
           onClick={() => handleLogin("user")}
         >
           User
         </Button>
         <Button
+          sx={{ margin: 1 }}
           variant="contained"
           onClick={() => handleLogin("business")}
         >
           Business
         </Button>
         <Button
+          sx={{ margin: 1 }}
           variant="contained"
           onClick={() => handleLogin("admin")}
         >
           Admin
         </Button>
       </div>
-    </Container>
+    </PageWrapper>
   )
 }
 
